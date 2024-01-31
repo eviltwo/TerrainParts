@@ -6,6 +6,16 @@ namespace TerrainParts.Editor
 {
     public class TerrainPartsWindow : EditorWindow
     {
+        private static readonly string[] _tabNames = new string[]
+        {
+            "Parts",
+            "Layer",
+            "Terrain",
+        };
+
+        private int _selectedTab = 0;
+        private Vector2 _scrollPosition;
+
         [MenuItem("Window/TerrainParts")]
         public static void Open()
         {
@@ -13,14 +23,6 @@ namespace TerrainParts.Editor
             window.titleContent = new GUIContent("Terrain Parts");
             window.Show();
         }
-
-        private static readonly string[] _tabNames = new string[]
-        {
-            "Parts",
-            "Layer",
-            "Terrain",
-        };
-        private int _selectedTab = 0;
 
         private void OnEnable()
         {
@@ -52,29 +54,34 @@ namespace TerrainParts.Editor
         private void DrawPartsGUI()
         {
             const float LabelWidth = 150;
-            const float ValueWidth = 100;
+            const float ValueWidth = 40;
 
             using (new GUILayout.HorizontalScope())
             {
                 EditorGUILayout.LabelField("Object", GUILayout.MaxWidth(LabelWidth));
                 EditorGUILayout.LabelField("Layer", GUILayout.MaxWidth(ValueWidth));
-                EditorGUILayout.LabelField("OrderInLayer", GUILayout.MaxWidth(ValueWidth));
+                EditorGUILayout.LabelField("Order", GUILayout.MaxWidth(ValueWidth));
             }
             EditorGUILayout.Space();
 
-            var parts = FindObjectsOfInterface<ITerrainParts>();
-            parts.Sort(TerrainPartsUtility.CompareOrderInLayer);
-            var count = parts.Count;
-            for (int i = 0; i < count; i++)
+            using (var scroll = new GUILayout.ScrollViewScope(_scrollPosition))
             {
-                var part = parts[i];
-                if (part is Component component)
+                _scrollPosition = scroll.scrollPosition;
+
+                var parts = FindObjectsOfInterface<ITerrainParts>();
+                parts.Sort(TerrainPartsUtility.CompareOrderInLayer);
+                var count = parts.Count;
+                for (int i = 0; i < count; i++)
                 {
-                    using (new GUILayout.HorizontalScope())
+                    var part = parts[i];
+                    if (part is Component component)
                     {
-                        EditorGUILayout.LabelField(component.gameObject.name, GUILayout.MaxWidth(LabelWidth));
-                        EditorGUILayout.LabelField(part.GetLayer().ToString(), GUILayout.MaxWidth(ValueWidth));
-                        EditorGUILayout.LabelField(part.GetOrderInLayer().ToString(), GUILayout.MaxWidth(ValueWidth));
+                        using (new GUILayout.HorizontalScope())
+                        {
+                            EditorGUILayout.LabelField(component.gameObject.name, GUILayout.MaxWidth(LabelWidth));
+                            EditorGUILayout.LabelField(part.GetLayer().ToString(), GUILayout.MaxWidth(ValueWidth));
+                            EditorGUILayout.LabelField(part.GetOrderInLayer().ToString(), GUILayout.MaxWidth(ValueWidth));
+                        }
                     }
                 }
             }
