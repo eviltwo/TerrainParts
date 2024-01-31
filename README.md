@@ -1,5 +1,5 @@
 # TerrainParts
- Non-destructive terrain modifier for Unity.
+ Non-destructive terrain modifier for Unity. Place shapes without using terrain paint.
  
  I made this to use in my game. But anyone can use it freely.
 
