@@ -21,3 +21,14 @@ https://github.com/eviltwo/TerrainParts.git?path=src/TerrainParts/Assets/Terrain
 - Open Window -> TerrainParts in menu.
 - Click "Rebuild" button.
   - Terrain does not update automatically, so press the button every time after editing.
+
+# Features
+| Feature | Status |
+| --- | --- |
+| Sort processing order | Included |
+| Height modify in circle | Included |
+| Height modify in spline | Included |
+| Texture (layer) modify | Not yet |
+| Hole modify | Not yet |
+| More shape textures (.png) | Add when I needed |
+| Tree / Details modify | Think when I needed |
