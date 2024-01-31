@@ -17,7 +17,7 @@ https://github.com/eviltwo/TerrainParts.git?path=src/TerrainParts/Assets/Terrain
 
 # How to use
 - Create new terrain.
-- Create new gameobject and attach TerrainCircle component or other.
+- Create new gameobject and attach TerrainSquare component or other.
 - Open Window -> TerrainParts in menu.
 - Click "Rebuild" button.
   - Terrain does not update automatically, so press the button every time after editing.
@@ -26,6 +26,7 @@ https://github.com/eviltwo/TerrainParts.git?path=src/TerrainParts/Assets/Terrain
 | Feature | Status |
 | --- | --- |
 | Sort processing order | Included |
+| Height modify in square | Included |
 | Height modify in circle | Included |
 | Height modify in spline | Included |
 | Texture (layer) modify | Not yet |
