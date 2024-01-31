@@ -16,7 +16,8 @@ https://github.com/eviltwo/TerrainParts.git?path=src/TerrainParts/Assets/Terrain
 ```
 
 # How to use
-- Place gameobject and attach TerrainCircle component or other.
+- Create new terrain.
+- Create new gameobject and attach TerrainCircle component or other.
 - Open Window -> TerrainParts in menu.
 - Click "Rebuild" button.
   - Terrain does not update automatically, so press the button every time after editing.
