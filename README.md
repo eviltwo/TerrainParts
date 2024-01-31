@@ -13,7 +13,7 @@
 https://github.com/eviltwo/TerrainParts.git?path=src/TerrainParts/Assets/TerrainParts
 ```
 
-# Hou to use
+# How to use
 - Place gameobject and attach TerrainCircle component or other.
 - Open Window -> TerrainParts in menu.
 - Click "Rebuild" button.
