@@ -52,6 +52,7 @@ namespace TerrainParts.Editor
         private void DrawPartsGUI()
         {
             var parts = FindObjectsOfInterface<ITerrainParts>();
+            parts.Sort(TerrainPartsUtility.CompareOrderInLayer);
             var count = parts.Count;
             for (int i = 0; i < count; i++)
             {
