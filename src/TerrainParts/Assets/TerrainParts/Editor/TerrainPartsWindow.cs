@@ -102,6 +102,7 @@ namespace TerrainParts.Editor
                 var stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
                 var parts = FindObjectsOfInterface<ITerrainParts>();
+                parts.Sort(TerrainPartsUtility.CompareOrderInLayer);
                 for (int i = 0; i < terrainCount; i++)
                 {
                     var terrain = terrains[i];

@@ -65,10 +65,10 @@ namespace TerrainParts
             }
             var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, surface.y, _writeCondition);
             var texture = _alphaTexture == null ? Texture2D.whiteTexture : _alphaTexture;
-            var copyTexture = new Texture2D(texture.width, texture.height, texture.format, true);
+            var copyTexture = new Texture2D(texture.width, texture.height, texture.format, texture.mipmapCount, true);
             Graphics.CopyTexture(texture, copyTexture);
             var color = copyTexture.GetPixelBilinear(localSurface.x + 0.5f, localSurface.z + 0.5f);
-            var alpha = color.r;
+            var alpha = Mathf.Clamp01(color.r);
             return Mathf.Lerp(currentHeight, targetHeight, alpha);
         }
 

@@ -29,6 +29,7 @@ namespace TerrainParts.Editor
             for (int i = 0; i < partsCount; i++)
             {
                 var p = parts[i];
+                p.Setup(_terrain);
                 p.GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
                 minX = Mathf.Max(minX, _terrain.transform.position.x);
                 minZ = Mathf.Max(minZ, _terrain.transform.position.z);
