@@ -70,7 +70,7 @@ namespace TerrainParts.Splines
             {
                 for (int y = 0; y < _mapResolution.y; y++)
                 {
-                    _innerHeightMap[y, x] = -1;
+                    _innerHeightMap[y, x] = float.MinValue;
                 }
             }
 
@@ -91,7 +91,8 @@ namespace TerrainParts.Splines
                         var worldPosition = transform.TransformPoint(position);
                         var worldTangent = transform.TransformDirection(tangent);
                         var worldUp = transform.TransformDirection(up);
-                        var worldRight = Vector3.Cross(worldTangent, worldUp).normalized;
+                        var worldRight = -Vector3.Cross(worldTangent, worldUp).normalized;
+                        worldPosition += worldRight * _offset.x + worldUp * _offset.y;
                         for (int x = 0; x < horizontalResolution; x++)
                         {
                             var hrizonT = (float)x / (horizontalResolution - 1);
@@ -101,7 +102,7 @@ namespace TerrainParts.Splines
                             var innerHeightMapX = (int)(innerHeightMapPosition.x / unitPerPixel);
                             var innerHeightMapZ = (int)(innerHeightMapPosition.z / unitPerPixel);
                             var existingHeight = _innerHeightMap[innerHeightMapZ, innerHeightMapX];
-                            if (existingHeight < 0)
+                            if (existingHeight == float.MinValue)
                             {
                                 _innerHeightMap[innerHeightMapZ, innerHeightMapX] = horizonHeight;
                             }
@@ -135,7 +136,8 @@ namespace TerrainParts.Splines
                         var worldPosition = transform.TransformPoint(position);
                         var worldTangent = transform.TransformDirection(tangent);
                         var worldUp = transform.TransformDirection(up);
-                        var worldRight = Vector3.Cross(worldTangent, worldUp).normalized;
+                        var worldRight = -Vector3.Cross(worldTangent, worldUp).normalized;
+                        worldPosition += worldRight * _offset.x + worldUp * _offset.y;
                         var rightPosition = worldPosition + worldRight * _width * 0.5f;
                         var leftPosition = worldPosition - worldRight * _width * 0.5f;
                         minX = Mathf.Min(minX, rightPosition.x, leftPosition.x);
@@ -158,7 +160,7 @@ namespace TerrainParts.Splines
                 (worldX - _mapMin.x) / (_mapMax.x - _mapMin.x) * _mapResolution.x,
                 (worldZ - _mapMin.y) / (_mapMax.y - _mapMin.y) * _mapResolution.y);
             var innerMapHeight = GetInnerHeight(mapPosition);
-            if (innerMapHeight < 0)
+            if (innerMapHeight == float.MinValue)
             {
                 return currentHeight;
             }
@@ -189,7 +191,7 @@ namespace TerrainParts.Splines
                 }
 
                 var height = _innerHeightMap[position.y, position.x];
-                if (height < 0)
+                if (height == float.MinValue)
                 {
                     continue;
                 }
@@ -202,7 +204,7 @@ namespace TerrainParts.Splines
 
             if (totalWeight == 0)
             {
-                return -1;
+                return float.MinValue;
             }
 
             return totalHeight / totalWeight;
