@@ -115,8 +115,8 @@ namespace TerrainParts.Splines
                             var horizonPosition = worldPosition + worldRight * _width * (horizonT - 0.5f);
                             var horizonHeight = horizonPosition.y;
                             var innerHeightMapPosition = horizonPosition - new Vector3(minX, 0, minZ);
-                            var innerHeightMapX = (int)(innerHeightMapPosition.x / unitPerPixel);
-                            var innerHeightMapZ = (int)(innerHeightMapPosition.z / unitPerPixel);
+                            var innerHeightMapX = Mathf.Clamp(Mathf.FloorToInt(innerHeightMapPosition.x / unitPerPixel), 0, _mapResolution.x - 1);
+                            var innerHeightMapZ = Mathf.Clamp(Mathf.FloorToInt(innerHeightMapPosition.z / unitPerPixel), 0, _mapResolution.y - 1);
                             var alpha = copiedTexture.GetPixelBilinear(horizonT, t).a;
                             var existingHeight = _innerHeightMap[innerHeightMapZ, innerHeightMapX];
                             if (existingHeight == float.MinValue)
