@@ -4,3 +4,4 @@
 ### Added
 - Base systems.
 - TerrainCircle component.
+- TerrainSpline component.
