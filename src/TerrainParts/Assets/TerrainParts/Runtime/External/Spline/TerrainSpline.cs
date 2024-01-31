@@ -47,6 +47,7 @@ namespace TerrainParts.Splines
         private Vector2 _mapMax;
         private Vector2Int _mapResolution;
         private float[,] _innerHeightMap;
+        private float[,] _innerAlphaMap;
 
         private void Reset()
         {
@@ -59,6 +60,12 @@ namespace TerrainParts.Splines
 
         public void Setup(float unitPerPixel)
         {
+            // Copy texture.
+            var texture = _alphaTexture == null ? Texture2D.whiteTexture : _alphaTexture;
+            var copiedTexture = new Texture2D(texture.width, texture.height, texture.format, texture.mipmapCount, true);
+            Graphics.CopyTexture(texture, copiedTexture);
+
+            // Create inner height map.
             GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
             _mapMin = new Vector2(minX, minZ);
             _mapMax = new Vector2(maxX, maxZ);
@@ -71,6 +78,15 @@ namespace TerrainParts.Splines
                 for (int y = 0; y < _mapResolution.y; y++)
                 {
                     _innerHeightMap[y, x] = float.MinValue;
+                }
+            }
+
+            _innerAlphaMap = new float[_mapResolution.y, _mapResolution.x];
+            for (int x = 0; x < _mapResolution.x; x++)
+            {
+                for (int y = 0; y < _mapResolution.y; y++)
+                {
+                    _innerAlphaMap[y, x] = 0;
                 }
             }
 
@@ -95,20 +111,27 @@ namespace TerrainParts.Splines
                         worldPosition += worldRight * _offset.x + worldUp * _offset.y;
                         for (int x = 0; x < horizontalResolution; x++)
                         {
-                            var hrizonT = (float)x / (horizontalResolution - 1);
-                            var horizonPosition = worldPosition + worldRight * _width * (hrizonT - 0.5f);
+                            var horizonT = (float)x / (horizontalResolution - 1);
+                            var horizonPosition = worldPosition + worldRight * _width * (horizonT - 0.5f);
                             var horizonHeight = horizonPosition.y;
                             var innerHeightMapPosition = horizonPosition - new Vector3(minX, 0, minZ);
                             var innerHeightMapX = (int)(innerHeightMapPosition.x / unitPerPixel);
                             var innerHeightMapZ = (int)(innerHeightMapPosition.z / unitPerPixel);
+                            var alpha = copiedTexture.GetPixelBilinear(horizonT, t).a;
                             var existingHeight = _innerHeightMap[innerHeightMapZ, innerHeightMapX];
                             if (existingHeight == float.MinValue)
                             {
                                 _innerHeightMap[innerHeightMapZ, innerHeightMapX] = horizonHeight;
+                                _innerAlphaMap[innerHeightMapZ, innerHeightMapX] = alpha;
                             }
                             else
                             {
-                                _innerHeightMap[innerHeightMapZ, innerHeightMapX] = TerrainPartsUtility.MergeHeight(existingHeight, horizonHeight, _innerMapWriteCondition);
+                                var finalHeight = TerrainPartsUtility.MergeHeight(existingHeight, horizonHeight, _innerMapWriteCondition);
+                                _innerHeightMap[innerHeightMapZ, innerHeightMapX] = finalHeight;
+                                if (finalHeight == horizonHeight)
+                                {
+                                    _innerAlphaMap[innerHeightMapZ, innerHeightMapX] = alpha;
+                                }
                             }
                         }
                     }
@@ -159,16 +182,18 @@ namespace TerrainParts.Splines
             var mapPosition = new Vector2(
                 (worldX - _mapMin.x) / (_mapMax.x - _mapMin.x) * _mapResolution.x,
                 (worldZ - _mapMin.y) / (_mapMax.y - _mapMin.y) * _mapResolution.y);
-            var innerMapHeight = GetInnerHeight(mapPosition);
+            var innerMapHeight = GetValueFromMap(_innerHeightMap, _mapResolution, mapPosition);
             if (innerMapHeight == float.MinValue)
             {
                 return currentHeight;
             }
 
-            return TerrainPartsUtility.MergeHeight(currentHeight, innerMapHeight, _writeCondition);
+            var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, innerMapHeight, _writeCondition);
+            var alpha = GetValueFromMap(_innerAlphaMap, _mapResolution, mapPosition);
+            return Mathf.Lerp(currentHeight, targetHeight, alpha);
         }
 
-        private float GetInnerHeight(Vector2 mapPosition)
+        private static float GetValueFromMap(float[,] map, Vector2Int mapResolution, Vector2 mapPosition)
         {
             var CheckPositions = new Vector2Int[]
             {
@@ -185,12 +210,12 @@ namespace TerrainParts.Splines
             {
                 var checkPosition = CheckPositions[i];
                 var position = basePosition + checkPosition;
-                if (position.x < 0 || position.x >= _mapResolution.x || position.y < 0 || position.y >= _mapResolution.y)
+                if (position.x < 0 || position.x >= mapResolution.x || position.y < 0 || position.y >= mapResolution.y)
                 {
                     continue;
                 }
 
-                var height = _innerHeightMap[position.y, position.x];
+                var height = map[position.y, position.x];
                 if (height == float.MinValue)
                 {
                     continue;
