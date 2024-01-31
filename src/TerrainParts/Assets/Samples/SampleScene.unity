@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 216356205}
   - component: {fileID: 216356204}
   m_Layer: 0
-  m_Name: TerrainCircle (1)
+  m_Name: TerrainSquare (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,14 +163,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 216356203}
-  m_LocalRotation: {x: 0, y: -0.30926603, z: 0, w: 0.95097566}
-  m_LocalPosition: {x: 104.66, y: 10.05, z: 48.11}
+  m_LocalRotation: {x: 0.12743951, y: 0.17925268, z: -0.023424022, w: 0.9752328}
+  m_LocalPosition: {x: 104.2, y: 5.8, z: 45.2}
   m_LocalScale: {x: 20, y: 1, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: -36.03, z: 0}
+  m_LocalEulerAnglesHint: {x: 14.89, y: 20.83, z: 0}
 --- !u!1 &386652293
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 386652295}
   - component: {fileID: 386652294}
   m_Layer: 0
-  m_Name: TerrainCircle (2)
+  m_Name: TerrainSquare (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -211,14 +211,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 386652293}
-  m_LocalRotation: {x: 0, y: -0.30926603, z: 0, w: 0.95097566}
-  m_LocalPosition: {x: 90.8, y: 15.3, z: 39.2}
-  m_LocalScale: {x: 20, y: 1, z: 20}
+  m_LocalRotation: {x: 0, y: -0.21303032, z: 0, w: 0.9770456}
+  m_LocalPosition: {x: 95.3, y: 7.3, z: 22.2}
+  m_LocalScale: {x: 20, y: 1, z: 60}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: -36.03, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -24.6, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 862256570}
   - component: {fileID: 862256569}
   m_Layer: 0
-  m_Name: TerrainCircle (3)
+  m_Name: TerrainSquare (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -354,8 +354,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862256568}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 252.7, y: 100, z: 215.6}
-  m_LocalScale: {x: 300, y: 1, z: 300}
+  m_LocalPosition: {x: 500, y: 100, z: 500}
+  m_LocalScale: {x: 800, y: 1, z: 800}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -464,7 +464,7 @@ GameObject:
   - component: {fileID: 1361712756}
   - component: {fileID: 1361712755}
   m_Layer: 0
-  m_Name: TerrainCircle (0)
+  m_Name: TerrainSquare (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -494,7 +494,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1361712754}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 83.9, y: 23.5, z: 69}
+  m_LocalPosition: {x: 78.5, y: 23.5, z: 67.4}
   m_LocalScale: {x: 100, y: 1, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []

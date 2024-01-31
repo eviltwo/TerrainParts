@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace TerrainParts
 {
-    public class TerrainCircle : MonoBehaviour, ITerrainParts
+    public class TerrainSquare : MonoBehaviour, ITerrainParts
     {
         [SerializeField]
         private Texture2D _alphaTexture = null;
@@ -32,19 +32,26 @@ namespace TerrainParts
 
         public int GetOrderInLayer() => _orderInLayer;
 
+        private static readonly Vector3[] _corners = new Vector3[]
+        {
+            new Vector3(-0.5f, 0, -0.5f),
+            new Vector3(-0.5f, 0, 0.5f),
+            new Vector3(0.5f, 0, 0.5f),
+            new Vector3(0.5f, 0, -0.5f),
+        };
+
         private Texture2D _copiedTexture = null;
 
         public void GetRect(out float minX, out float minZ, out float maxX, out float maxZ)
         {
-            const int AngleResolution = 32;
             minX = float.MaxValue;
             minZ = float.MaxValue;
             maxX = float.MinValue;
             maxZ = float.MinValue;
-            for (int i = 0; i < AngleResolution; i++)
+            var cornersCount = _corners.Length;
+            for (int i = 0; i < cornersCount; i++)
             {
-                var angle = 360f / AngleResolution * i;
-                var position = GetEdgePosition(angle);
+                var position = transform.TransformPoint(_corners[i]);
                 if (position.x < minX) minX = position.x;
                 if (position.z < minZ) minZ = position.z;
                 if (position.x > maxX) maxX = position.x;
@@ -61,47 +68,32 @@ namespace TerrainParts
 
         public float GetHeight(float worldX, float worldZ, float currentHeight)
         {
-            var surface = FitSurface(new Vector3(worldX, 0, worldZ));
+            var surface = FitToSurface(new Vector3(worldX, 0, worldZ));
             var localSurface = transform.InverseTransformPoint(surface);
-            var isInside = localSurface.x * localSurface.x + localSurface.z * localSurface.z < 0.5f * 0.5f;
+            var isInside = localSurface.x >= -0.5f && localSurface.x <= 0.5f && localSurface.z >= -0.5f && localSurface.z <= 0.5f;
             if (!isInside)
             {
                 return currentHeight;
             }
             var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, surface.y, _writeCondition);
-            var color = _copiedTexture.GetPixelBilinear(localSurface.x + 0.5f, localSurface.z + 0.5f);
+            var color = _copiedTexture.GetPixelBilinear(Mathf.Clamp01(localSurface.x + 0.5f), Mathf.Clamp01(localSurface.z + 0.5f));
             var alpha = Mathf.Clamp01(color.a);
             return Mathf.Lerp(currentHeight, targetHeight, alpha);
         }
 
         private void OnDrawGizmosSelected()
         {
-            GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireCube(new Vector3((minX + maxX) / 2, 0, (minZ + maxZ) / 2), new Vector3(maxX - minX, 0, maxZ - minZ));
-        }
-
-        private void OnDrawGizmos()
-        {
-            const int AngleResolution = 32;
-            Gizmos.color = Color.blue;
-            for (int i = 0; i < AngleResolution; i++)
+            var cornersCount = _corners.Length;
+            for (int i = 0; i < cornersCount; i++)
             {
-                var angle = 360f / AngleResolution * i;
-                var nextAngle = 360f / AngleResolution * (i + 1);
-                Gizmos.DrawLine(GetEdgePosition(angle), GetEdgePosition(nextAngle));
+                var p1 = transform.TransformPoint(_corners[i]);
+                var p2 = transform.TransformPoint(_corners[(i + 1) % cornersCount]);
+                Gizmos.DrawLine(p1, p2);
             }
         }
 
-        private Vector3 GetEdgePosition(float angle)
-        {
-            var radian = Mathf.Deg2Rad * angle;
-            var localX = Mathf.Cos(radian) * 0.5f;
-            var localZ = Mathf.Sin(radian) * 0.5f;
-            return transform.TransformPoint(new Vector3(localX, 0, localZ));
-        }
-
-        private Vector3 FitSurface(Vector3 worldPosition)
+        private Vector3 FitToSurface(Vector3 worldPosition)
         {
             var plane = new Plane(transform.up, transform.position);
             if (plane.Raycast(new Ray(worldPosition, Vector3.up), out var distance))
