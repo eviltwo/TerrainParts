@@ -51,6 +51,17 @@ namespace TerrainParts.Editor
 
         private void DrawPartsGUI()
         {
+            const float LabelWidth = 150;
+            const float ValueWidth = 100;
+
+            using (new GUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField("Object", GUILayout.MaxWidth(LabelWidth));
+                EditorGUILayout.LabelField("Layer", GUILayout.MaxWidth(ValueWidth));
+                EditorGUILayout.LabelField("OrderInLayer", GUILayout.MaxWidth(ValueWidth));
+            }
+            EditorGUILayout.Space();
+
             var parts = FindObjectsOfInterface<ITerrainParts>();
             parts.Sort(TerrainPartsUtility.CompareOrderInLayer);
             var count = parts.Count;
@@ -61,9 +72,9 @@ namespace TerrainParts.Editor
                 {
                     using (new GUILayout.HorizontalScope())
                     {
-                        EditorGUILayout.LabelField(component.gameObject.name, GUILayout.MaxWidth(150));
-                        EditorGUILayout.LabelField(part.GetLayer().ToString(), GUILayout.MaxWidth(100));
-                        EditorGUILayout.LabelField(part.GetOrderInLayer().ToString(), GUILayout.MaxWidth(100));
+                        EditorGUILayout.LabelField(component.gameObject.name, GUILayout.MaxWidth(LabelWidth));
+                        EditorGUILayout.LabelField(part.GetLayer().ToString(), GUILayout.MaxWidth(ValueWidth));
+                        EditorGUILayout.LabelField(part.GetOrderInLayer().ToString(), GUILayout.MaxWidth(ValueWidth));
                     }
                 }
             }
