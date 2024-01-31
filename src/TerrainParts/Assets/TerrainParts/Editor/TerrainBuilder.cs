@@ -31,10 +31,10 @@ namespace TerrainParts.Editor
                 var p = parts[i];
                 p.Setup(terrainData.size.x / terrainData.heightmapResolution);
                 p.GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
-                minX = Mathf.Max(minX, _terrain.transform.position.x);
-                minZ = Mathf.Max(minZ, _terrain.transform.position.z);
-                maxX = Mathf.Min(maxX, _terrain.transform.position.x + _terrain.terrainData.size.x);
-                maxZ = Mathf.Min(maxZ, _terrain.transform.position.z + _terrain.terrainData.size.z);
+                minX = Mathf.Max(minX - _terrain.transform.position.x, 0);
+                minZ = Mathf.Max(minZ - _terrain.transform.position.z, 0);
+                maxX = Mathf.Min(maxX - _terrain.transform.position.x, _terrain.terrainData.size.x);
+                maxZ = Mathf.Min(maxZ - _terrain.transform.position.z, _terrain.terrainData.size.z);
                 var baseX = Mathf.CeilToInt(minX / terrainData.size.x * resolution);
                 var baseZ = Mathf.CeilToInt(minZ / terrainData.size.z * resolution);
                 var exX = Mathf.CeilToInt(maxX / terrainData.size.x * resolution);
@@ -47,10 +47,10 @@ namespace TerrainParts.Editor
                     {
                         var pixelX = baseX + x;
                         var pixelZ = baseZ + z;
-                        var worldX = (float)pixelX / resolution * terrainData.size.x;
-                        var worldZ = (float)pixelZ / resolution * terrainData.size.z;
-                        var currentHeight = heightMap[pixelZ, pixelX] * terrainData.size.y;
-                        heightMap[pixelZ, pixelX] = p.GetHeight(worldX, worldZ, currentHeight) / terrainData.size.y;
+                        var worldX = _terrain.transform.position.x + (float)pixelX / resolution * terrainData.size.x;
+                        var worldZ = _terrain.transform.position.z + (float)pixelZ / resolution * terrainData.size.z;
+                        var currentHeight = heightMap[pixelZ, pixelX] * terrainData.size.y + _terrain.transform.position.y;
+                        heightMap[pixelZ, pixelX] = (p.GetHeight(worldX, worldZ, currentHeight) - _terrain.transform.position.y) / terrainData.size.y;
                     }
                 }
             }
