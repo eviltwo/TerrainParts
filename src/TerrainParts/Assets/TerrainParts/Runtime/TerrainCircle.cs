@@ -70,7 +70,7 @@ namespace TerrainParts
             }
             var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, surface.y, _writeCondition);
             var color = _copiedTexture.GetPixelBilinear(localSurface.x + 0.5f, localSurface.z + 0.5f);
-            var alpha = Mathf.Clamp01(color.r);
+            var alpha = Mathf.Clamp01(color.a);
             return Mathf.Lerp(currentHeight, targetHeight, alpha);
         }
 
