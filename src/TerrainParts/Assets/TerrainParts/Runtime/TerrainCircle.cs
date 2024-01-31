@@ -49,9 +49,8 @@ namespace TerrainParts
             }
         }
 
-        public void Setup(Terrain terrain)
+        public void Setup(float unitPerPixel)
         {
-            // todo: Cache
         }
 
         public float GetHeight(float worldX, float worldZ, float currentHeight)
