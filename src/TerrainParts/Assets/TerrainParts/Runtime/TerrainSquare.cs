@@ -8,29 +8,7 @@ namespace TerrainParts
         private Texture2D _alphaTexture = null;
 
         [SerializeField]
-        private WriteCondition _writeCondition = default;
-
-        [SerializeField]
-        private int _layer = 0;
-
-        [SerializeField]
-        private int _orderInLayer = 0;
-
-        public int Layer
-        {
-            get { return _layer; }
-            set { _layer = value; }
-        }
-
-        public int OrderInLayer
-        {
-            get { return _orderInLayer; }
-            set { _orderInLayer = value; }
-        }
-
-        public int GetLayer() => _layer;
-
-        public int GetOrderInLayer() => _orderInLayer;
+        private TerrainPartsBasicData _basicData = default;
 
         private static readonly Vector3[] _corners = new Vector3[]
         {
@@ -44,6 +22,14 @@ namespace TerrainParts
         private float _cachedOriginY;
         private float _cachedRightY;
         private float _cachedForwardY;
+
+        public ToolCategory GetToolCategory() => _basicData.ToolCategory;
+
+        public int GetTextureLayerIndex() => _basicData.TextureLayerIndex;
+
+        public int GetLayer() => _basicData.Layer;
+
+        public int GetOrderInLayer() => _basicData.OrderInLayer;
 
         public void GetRect(out float minX, out float minZ, out float maxX, out float maxZ)
         {
@@ -82,10 +68,24 @@ namespace TerrainParts
             {
                 return currentHeight;
             }
-            var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, surface.y, _writeCondition);
+            var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, surface.y, _basicData.WriteCondition);
             var color = _copiedTexture.GetPixelBilinear(Mathf.Clamp01(localSurface.x + 0.5f), Mathf.Clamp01(localSurface.z + 0.5f));
             var alpha = Mathf.Clamp01(color.a);
             return Mathf.Lerp(currentHeight, targetHeight, alpha);
+        }
+
+        public float GetAlpha(float worldX, float worldZ, float currentAlpha)
+        {
+            var surface = FitToSurfaceWithCache(new Vector3(worldX, 0, worldZ));
+            var localSurface = transform.InverseTransformPoint(surface);
+            var isInside = localSurface.x >= -0.5f && localSurface.x <= 0.5f && localSurface.z >= -0.5f && localSurface.z <= 0.5f;
+            if (!isInside)
+            {
+                return currentAlpha;
+            }
+            var color = _copiedTexture.GetPixelBilinear(Mathf.Clamp01(localSurface.x + 0.5f), Mathf.Clamp01(localSurface.z + 0.5f));
+            var alpha = _basicData.Strength * Mathf.Clamp01(color.a);
+            return Mathf.Clamp01(currentAlpha + alpha);
         }
 
         private void OnDrawGizmosSelected()

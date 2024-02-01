@@ -12,7 +12,7 @@ namespace TerrainParts.Editor
             _terrain = terrain;
         }
 
-        public void Build(IReadOnlyList<ITerrainParts> parts)
+        public void Build(IEnumerable<ITerrainParts> parts)
         {
             var terrainData = _terrain.terrainData;
             var resolution = terrainData.heightmapResolution;
@@ -25,12 +25,9 @@ namespace TerrainParts.Editor
                 }
             }
 
-            var partsCount = parts.Count;
-            for (int i = 0; i < partsCount; i++)
+            foreach (var part in parts)
             {
-                var p = parts[i];
-                p.Setup(terrainData.size.x / terrainData.heightmapResolution);
-                p.GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
+                part.GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
                 minX = Mathf.Max(minX - _terrain.transform.position.x, 0);
                 minZ = Mathf.Max(minZ - _terrain.transform.position.z, 0);
                 maxX = Mathf.Min(maxX - _terrain.transform.position.x, _terrain.terrainData.size.x);
@@ -50,7 +47,7 @@ namespace TerrainParts.Editor
                         var worldX = _terrain.transform.position.x + (float)pixelX / resolution * terrainData.size.x;
                         var worldZ = _terrain.transform.position.z + (float)pixelZ / resolution * terrainData.size.z;
                         var currentHeight = heightMap[pixelZ, pixelX] * terrainData.size.y + _terrain.transform.position.y;
-                        heightMap[pixelZ, pixelX] = (p.GetHeight(worldX, worldZ, currentHeight) - _terrain.transform.position.y) / terrainData.size.y;
+                        heightMap[pixelZ, pixelX] = (part.GetHeight(worldX, worldZ, currentHeight) - _terrain.transform.position.y) / terrainData.size.y;
                     }
                 }
             }

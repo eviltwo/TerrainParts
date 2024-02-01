@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.9.0] - 2024-02-01
+### Changed
+- Terrain parts modify Terrain texture layer.
+- Fix base system and terrain parts.
+
 ## [0.8.2] - 2024-02-01
 ### Changed
 - TerrainCircle to TerrainSquare. Result of shape is same.
