@@ -32,4 +32,4 @@ https://github.com/eviltwo/TerrainParts.git?path=src/TerrainParts/Assets/Terrain
 | Texture layer modify | Included |
 | Hole modify | Not yet |
 | More shape textures (.png) | Add when I needed |
-| Tree / Details modify | Think when I needed |
+| Tree / Details layer modify | Not yet |
