@@ -24,7 +24,10 @@ namespace TerrainParts.Splines
         private WriteCondition _writeCondition = default;
 
         [SerializeField]
-        private WriteCondition _innerMapWriteCondition = default;
+        private WriteCondition _innerHeightMapWriteCondition = WriteCondition.IfHigher;
+
+        [SerializeField]
+        private WriteCondition _innerAlphaMapWriteCondition = WriteCondition.IfHigher;
 
         [SerializeField]
         private int _layer = 0;
@@ -92,14 +95,15 @@ namespace TerrainParts.Splines
                 }
             }
 
-            var horizontalResolution = Mathf.CeilToInt(width / unitPerPixel);
+            var safetyUnitPerPixel = Mathf.Max(unitPerPixel - 0.25f, 0.1f);
+            var horizontalResolution = Mathf.CeilToInt(width / safetyUnitPerPixel);
 
             var splines = _splineContainer.Splines;
             var splineCount = splines.Count;
             for (int i = 0; i < splineCount; i++)
             {
                 var spline = splines[i];
-                GetSeparation(spline, _width, unitPerPixel, _splineSeparationBuffer);
+                GetSeparation(spline, _width, safetyUnitPerPixel, _splineSeparationBuffer);
                 var separationCount = _splineSeparationBuffer.Count;
                 for (int j = 0; j < separationCount; j++)
                 {
@@ -119,21 +123,27 @@ namespace TerrainParts.Splines
                             var innerHeightMapPosition = horizonPosition - new Vector3(minX, 0, minZ);
                             var innerHeightMapX = Mathf.Clamp(Mathf.FloorToInt(innerHeightMapPosition.x / unitPerPixel), 0, _mapResolution.x - 1);
                             var innerHeightMapZ = Mathf.Clamp(Mathf.FloorToInt(innerHeightMapPosition.z / unitPerPixel), 0, _mapResolution.y - 1);
-                            var alpha = copiedTexture.GetPixelBilinear(horizonT, t).a;
                             var existingHeight = _innerHeightMap[innerHeightMapZ, innerHeightMapX];
                             if (existingHeight == float.MinValue)
                             {
                                 _innerHeightMap[innerHeightMapZ, innerHeightMapX] = horizonHeight;
+                            }
+                            else
+                            {
+                                var finalHeight = TerrainPartsUtility.MergeHeight(existingHeight, horizonHeight, _innerHeightMapWriteCondition);
+                                _innerHeightMap[innerHeightMapZ, innerHeightMapX] = finalHeight;
+                            }
+
+                            var alpha = copiedTexture.GetPixelBilinear(horizonT, t).a;
+                            var existingAlpha = _innerAlphaMap[innerHeightMapZ, innerHeightMapX];
+                            if (existingAlpha == 0)
+                            {
                                 _innerAlphaMap[innerHeightMapZ, innerHeightMapX] = alpha;
                             }
                             else
                             {
-                                var finalHeight = TerrainPartsUtility.MergeHeight(existingHeight, horizonHeight, _innerMapWriteCondition);
-                                _innerHeightMap[innerHeightMapZ, innerHeightMapX] = finalHeight;
-                                if (finalHeight == horizonHeight)
-                                {
-                                    _innerAlphaMap[innerHeightMapZ, innerHeightMapX] = alpha;
-                                }
+                                var finalAlpha = TerrainPartsUtility.MergeHeight(existingAlpha, alpha, _innerAlphaMapWriteCondition);
+                                _innerAlphaMap[innerHeightMapZ, innerHeightMapX] = finalAlpha;
                             }
                         }
                     }
@@ -187,11 +197,13 @@ namespace TerrainParts.Splines
                 prevTan = tan;
                 prevOver += remainDistance;
             }
+
+            result.Add(1);
         }
 
         public void GetRect(out float minX, out float minZ, out float maxX, out float maxZ)
         {
-            const int SeparationMaxDistance = 5;
+            const int SeparationMaxDistance = 10;
             minX = float.MaxValue;
             minZ = float.MaxValue;
             maxX = float.MinValue;
