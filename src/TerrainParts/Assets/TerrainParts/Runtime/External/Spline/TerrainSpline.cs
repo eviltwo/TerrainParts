@@ -1,4 +1,5 @@
 #if SPLINES_SUPPORTED
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -43,6 +44,7 @@ namespace TerrainParts.Splines
             set { _orderInLayer = value; }
         }
 
+        private List<float> _splineSeparationBuffer = new List<float>();
         private Vector2 _mapMin;
         private Vector2 _mapMax;
         private Vector2Int _mapResolution;
@@ -97,11 +99,11 @@ namespace TerrainParts.Splines
             for (int i = 0; i < splineCount; i++)
             {
                 var spline = splines[i];
-                var splineLength = spline.GetLength();
-                var splineResolution = Mathf.CeilToInt(splineLength / unitPerPixel);
-                for (int j = 0; j < splineResolution; j++)
+                GetSeparation(spline, _width, unitPerPixel, _splineSeparationBuffer);
+                var separationCount = _splineSeparationBuffer.Count;
+                for (int j = 0; j < separationCount; j++)
                 {
-                    var t = (float)j / (splineResolution - 1);
+                    var t = _splineSeparationBuffer[j];
                     if (spline.Evaluate(t, out var position, out var tangent, out var up))
                     {
                         var worldPosition = transform.TransformPoint(position);
@@ -139,9 +141,57 @@ namespace TerrainParts.Splines
             }
         }
 
+        /// <summary>
+        /// Calculate the separation (t positions) of the spline.
+        /// If large angle, more separation.
+        /// </summary>
+        private static void GetSeparation(Spline spline, float width, float maxDistance, List<float> result)
+        {
+            const int CheckPerCurve = 4;
+
+            maxDistance = Mathf.Max(maxDistance, 0.01f);
+            result.Clear();
+            result.Add(0);
+
+            spline.Evaluate(0, out var prevPos, out var prevTan, out _);
+            var checkCount = spline.GetCurveCount() * CheckPerCurve + 1;
+            var lastSeparationT = 0f;
+            var prevOver = 0f;
+            for (int i = 1; i < checkCount; i++)
+            {
+                var t = (float)i / (checkCount - 1);
+                spline.Evaluate(t, out var pos, out var tan, out _);
+                var posDistance = Vector3.Distance(prevPos, pos);
+                var angle = Vector3.Angle(prevTan, tan);
+                var edgeDistance = Mathf.Abs(width * Mathf.Sin(angle * Mathf.Deg2Rad));
+                var distance = posDistance + edgeDistance;
+                var remainDistance = distance;
+                if (prevOver + remainDistance > maxDistance)
+                {
+                    var usingDistance = maxDistance - prevOver;
+                    var prevT = (float)(i - 1) / (checkCount - 1);
+                    lastSeparationT = prevT + usingDistance / distance / (checkCount - 1);
+                    result.Add(lastSeparationT);
+                    remainDistance -= usingDistance;
+                    prevOver = 0;
+                }
+
+                while (remainDistance > maxDistance)
+                {
+                    remainDistance -= maxDistance;
+                    lastSeparationT += maxDistance / distance / (checkCount - 1);
+                    result.Add(lastSeparationT);
+                }
+
+                prevPos = pos;
+                prevTan = tan;
+                prevOver += remainDistance;
+            }
+        }
+
         public void GetRect(out float minX, out float minZ, out float maxX, out float maxZ)
         {
-            const int Resolution = 10;
+            const int SeparationMaxDistance = 5;
             minX = float.MaxValue;
             minZ = float.MaxValue;
             maxX = float.MinValue;
@@ -151,9 +201,11 @@ namespace TerrainParts.Splines
             for (int i = 0; i < splineCount; i++)
             {
                 var spline = splines[i];
-                for (int j = 0; j < Resolution; j++)
+                GetSeparation(spline, _width, SeparationMaxDistance, _splineSeparationBuffer);
+                var separationCount = _splineSeparationBuffer.Count;
+                for (int j = 0; j < separationCount; j++)
                 {
-                    var t = (float)j / (Resolution - 1);
+                    var t = _splineSeparationBuffer[j];
                     if (spline.Evaluate(t, out var position, out var tangent, out var up))
                     {
                         var worldPosition = transform.TransformPoint(position);
@@ -234,6 +286,20 @@ namespace TerrainParts.Splines
 
             return totalHeight / totalWeight;
         }
+
+        /*
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.blue;
+            var spline = _splineContainer.Spline;
+            GetSeparation(spline, _width, 5f, _splineSeparationBuffer);
+            foreach (var t in _splineSeparationBuffer)
+            {
+                spline.Evaluate(t, out var position, out _, out _);
+                Gizmos.DrawSphere(transform.TransformPoint(position), 0.5f);
+            }
+        }
+        */
     }
 }
 #endif
