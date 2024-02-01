@@ -41,6 +41,9 @@ namespace TerrainParts
         };
 
         private Texture2D _copiedTexture = null;
+        private float _cachedOriginY;
+        private float _cachedRightY;
+        private float _cachedForwardY;
 
         public void GetRect(out float minX, out float minZ, out float maxX, out float maxZ)
         {
@@ -64,11 +67,15 @@ namespace TerrainParts
             var texture = _alphaTexture == null ? Texture2D.whiteTexture : _alphaTexture;
             _copiedTexture = new Texture2D(texture.width, texture.height, texture.format, texture.mipmapCount, true);
             Graphics.CopyTexture(texture, _copiedTexture);
+
+            _cachedOriginY = FitToSurface(transform.position).y;
+            _cachedRightY = FitToSurface(transform.position + Vector3.right).y;
+            _cachedForwardY = FitToSurface(transform.position + Vector3.forward).y;
         }
 
         public float GetHeight(float worldX, float worldZ, float currentHeight)
         {
-            var surface = FitToSurface(new Vector3(worldX, 0, worldZ));
+            var surface = FitToSurfaceWithCache(new Vector3(worldX, 0, worldZ));
             var localSurface = transform.InverseTransformPoint(surface);
             var isInside = localSurface.x >= -0.5f && localSurface.x <= 0.5f && localSurface.z >= -0.5f && localSurface.z <= 0.5f;
             if (!isInside)
@@ -95,6 +102,7 @@ namespace TerrainParts
 
         private Vector3 FitToSurface(Vector3 worldPosition)
         {
+            worldPosition.y = 0;
             var plane = new Plane(transform.up, transform.position);
             if (plane.Raycast(new Ray(worldPosition, Vector3.up), out var distance))
             {
@@ -106,9 +114,17 @@ namespace TerrainParts
             }
             else
             {
-                Debug.LogError("Failed to fit surface");
+                Debug.LogError($"Failed to fit surface. {transform.position}, {worldPosition}");
                 return worldPosition;
             }
+        }
+
+        private Vector3 FitToSurfaceWithCache(Vector3 worldPosition)
+        {
+            var diff = worldPosition - transform.position;
+            var xy = (_cachedRightY - _cachedOriginY) * diff.x;
+            var zy = (_cachedForwardY - _cachedOriginY) * diff.z;
+            return new Vector3(worldPosition.x, xy + zy + _cachedOriginY, worldPosition.z);
         }
     }
 }
