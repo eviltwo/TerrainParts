@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace TerrainParts.Editor
         };
 
         private int _selectedTab = 0;
+        private ToolCategory _toolCategory = ToolCategoryExtention.Everything;
         private Vector2 _scrollPosition;
 
         [MenuItem("Window/TerrainParts")]
@@ -116,17 +118,34 @@ namespace TerrainParts.Editor
 
             EditorGUILayout.Space();
 
-            if (GUILayout.Button("Rebuild terrain using parts"))
+            _toolCategory = (ToolCategory)EditorGUILayout.EnumFlagsField("Tool filter", _toolCategory);
+            if (GUILayout.Button("Rebuild terrain"))
             {
                 var stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
-                var parts = FindObjectsOfInterface<ITerrainParts>();
+                var parts = FindObjectsOfInterface<ITerrainParts>().Where(p => p.GetToolCategory().HasFlagAny(_toolCategory)).ToList();
                 parts.Sort(TerrainPartsUtility.CompareOrderInLayer);
                 for (int i = 0; i < terrainCount; i++)
                 {
                     var terrain = terrains[i];
-                    var builder = new TerrainBuilder(terrain);
-                    builder.Build(parts);
+                    var terrainData = terrain.terrainData;
+                    foreach (var p in parts)
+                    {
+                        p.Setup(terrainData.size.x / terrainData.heightmapResolution);
+                    }
+
+                    if (_toolCategory.HasFlagAll(ToolCategory.Height))
+                    {
+                        var builder = new TerrainBuilder(terrain);
+                        var partsForTool = parts.Where(p => p.GetToolCategory().HasFlagAll(ToolCategory.Height));
+                        builder.Build(partsForTool);
+                    }
+                    if (_toolCategory.HasFlagAll(ToolCategory.Texture))
+                    {
+                        var painter = new TerrainTexturePainter(terrain);
+                        var partsForTool = parts.Where(p => p.GetToolCategory().HasFlagAll(ToolCategory.Texture));
+                        painter.Paint(partsForTool);
+                    }
                 }
                 stopwatch.Stop();
                 Debug.Log($"Rebuild terrain using parts: {stopwatch.ElapsedMilliseconds}ms");

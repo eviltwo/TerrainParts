@@ -9,10 +9,10 @@ namespace TerrainParts
         public ToolCategory ToolCategory = ToolCategory.Height;
 
         [SerializeField]
-        public int TextureLayerIndex = 0;
+        public int TextureLayerIndex = 1;
 
         [SerializeField]
-        public float TextureLayerAlpha = 1.0f;
+        public float Strength = 1.0f;
 
         [SerializeField]
         public WriteCondition WriteCondition = default;
