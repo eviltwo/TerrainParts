@@ -1,0 +1,26 @@
+{
+    "name": "TerrainParts.Spline.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9540f6600761bc74f97f5cfac478e959",
+        "GUID:5abe1fbf1a776bc44b2c042c4d91f96d",
+        "GUID:095cfb70689baac46ac35e458710acd9"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.splines",
+            "expression": "",
+            "define": "SPLINES_SUPPORTED"
+        }
+    ],
+    "noEngineReferences": false
+}
