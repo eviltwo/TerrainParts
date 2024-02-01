@@ -7,7 +7,7 @@ namespace TerrainParts.Editor
         public static void DrawBasicDataProperty(SerializedProperty property)
         {
             EditorGUILayout.PropertyField(property.FindPropertyRelative("ToolCategory"));
-            var toolCategory = (ToolCategory)property.FindPropertyRelative("ToolCategory").enumValueIndex;
+            var toolCategory = (ToolCategory)property.FindPropertyRelative("ToolCategory").enumValueFlag;
             if (toolCategory.HasFlagAny(ToolCategory.Texture | ToolCategory.Hole))
             {
                 using (new EditorGUI.IndentLevelScope())
