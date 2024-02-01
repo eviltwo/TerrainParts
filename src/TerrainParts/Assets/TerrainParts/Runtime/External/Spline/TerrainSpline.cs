@@ -21,31 +21,13 @@ namespace TerrainParts.Splines
         private Texture2D _alphaTexture = null;
 
         [SerializeField]
-        private WriteCondition _writeCondition = default;
-
-        [SerializeField]
         private WriteCondition _innerHeightMapWriteCondition = WriteCondition.IfHigher;
 
         [SerializeField]
         private WriteCondition _innerAlphaMapWriteCondition = WriteCondition.IfHigher;
 
         [SerializeField]
-        private int _layer = 0;
-
-        [SerializeField]
-        private int _orderInLayer = 0;
-
-        public int Layer
-        {
-            get { return _layer; }
-            set { _layer = value; }
-        }
-
-        public int OrderInLayer
-        {
-            get { return _orderInLayer; }
-            set { _orderInLayer = value; }
-        }
+        private TerrainPartsBasicData _basicData = default;
 
         private List<float> _splineSeparationBuffer = new List<float>();
         private Vector2 _mapMin;
@@ -59,9 +41,9 @@ namespace TerrainParts.Splines
             _splineContainer = GetComponent<SplineContainer>();
         }
 
-        public int GetLayer() => _layer;
+        public int GetLayer() => _basicData.Layer;
 
-        public int GetOrderInLayer() => _orderInLayer;
+        public int GetOrderInLayer() => _basicData.OrderInLayer;
 
         public void Setup(float unitPerPixel)
         {
@@ -252,7 +234,7 @@ namespace TerrainParts.Splines
                 return currentHeight;
             }
 
-            var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, innerMapHeight, _writeCondition);
+            var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, innerMapHeight, _basicData.WriteCondition);
             var alpha = GetValueFromMap(_innerAlphaMap, _mapResolution, mapPosition);
             return Mathf.Lerp(currentHeight, targetHeight, alpha);
         }

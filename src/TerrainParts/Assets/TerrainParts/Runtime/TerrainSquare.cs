@@ -8,29 +8,11 @@ namespace TerrainParts
         private Texture2D _alphaTexture = null;
 
         [SerializeField]
-        private WriteCondition _writeCondition = default;
+        private TerrainPartsBasicData _basicData = default;
 
-        [SerializeField]
-        private int _layer = 0;
+        public int GetLayer() => _basicData.Layer;
 
-        [SerializeField]
-        private int _orderInLayer = 0;
-
-        public int Layer
-        {
-            get { return _layer; }
-            set { _layer = value; }
-        }
-
-        public int OrderInLayer
-        {
-            get { return _orderInLayer; }
-            set { _orderInLayer = value; }
-        }
-
-        public int GetLayer() => _layer;
-
-        public int GetOrderInLayer() => _orderInLayer;
+        public int GetOrderInLayer() => _basicData.OrderInLayer;
 
         private static readonly Vector3[] _corners = new Vector3[]
         {
@@ -82,7 +64,7 @@ namespace TerrainParts
             {
                 return currentHeight;
             }
-            var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, surface.y, _writeCondition);
+            var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, surface.y, _basicData.WriteCondition);
             var color = _copiedTexture.GetPixelBilinear(Mathf.Clamp01(localSurface.x + 0.5f), Mathf.Clamp01(localSurface.z + 0.5f));
             var alpha = Mathf.Clamp01(color.a);
             return Mathf.Lerp(currentHeight, targetHeight, alpha);

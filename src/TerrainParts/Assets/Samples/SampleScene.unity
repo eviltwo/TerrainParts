@@ -153,9 +153,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _alphaTexture: {fileID: 0}
-  _writeCondition: 1
-  _layer: 1
-  _orderInLayer: 0
+  _basicData:
+    ToolCategory: 2
+    TextureLayerIndex: 0
+    TextureLayerAlpha: 1
+    WriteCondition: 1
+    Layer: 1
+    OrderInLayer: 0
 --- !u!4 &216356205
 Transform:
   m_ObjectHideFlags: 0
@@ -201,9 +205,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
-  _writeCondition: 1
-  _layer: 1
-  _orderInLayer: 0
+  _basicData:
+    ToolCategory: 0
+    TextureLayerIndex: 0
+    TextureLayerAlpha: 1
+    WriteCondition: 1
+    Layer: 1
+    OrderInLayer: 0
 --- !u!4 &386652295
 Transform:
   m_ObjectHideFlags: 0
@@ -253,11 +261,15 @@ MonoBehaviour:
   _width: 40
   _offset: {x: 0, y: 0, z: 0}
   _alphaTexture: {fileID: 2800000, guid: e162f26c24207504186bcebfa7f7f28d, type: 3}
-  _writeCondition: 0
   _innerHeightMapWriteCondition: 1
   _innerAlphaMapWriteCondition: 1
-  _layer: 2
-  _orderInLayer: 0
+  _basicData:
+    ToolCategory: 0
+    TextureLayerIndex: 0
+    TextureLayerAlpha: 1
+    WriteCondition: 0
+    Layer: 2
+    OrderInLayer: 0
 --- !u!114 &608726998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -842,9 +854,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
-  _writeCondition: 1
-  _layer: 0
-  _orderInLayer: 0
+  _basicData:
+    ToolCategory: 0
+    TextureLayerIndex: 0
+    TextureLayerAlpha: 1
+    WriteCondition: 1
+    Layer: 0
+    OrderInLayer: 0
 --- !u!4 &862256570
 Transform:
   m_ObjectHideFlags: 0
@@ -982,9 +998,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
-  _writeCondition: 1
-  _layer: 0
-  _orderInLayer: 0
+  _basicData:
+    ToolCategory: 0
+    TextureLayerIndex: 0
+    TextureLayerAlpha: 1
+    WriteCondition: 1
+    Layer: 0
+    OrderInLayer: 0
 --- !u!4 &1361712756
 Transform:
   m_ObjectHideFlags: 0
