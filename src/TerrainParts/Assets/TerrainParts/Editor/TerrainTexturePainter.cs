@@ -90,6 +90,12 @@ namespace TerrainParts.Editor
                 }
                 totalOthersAlpha += alphaMap[z, x, layer];
             }
+
+            if (totalOthersAlpha == 0)
+            {
+                return;
+            }
+
             var multiplier = targetOthersAlpha / totalOthersAlpha;
             for (var layer = 0; layer < layerCount; layer++)
             {
