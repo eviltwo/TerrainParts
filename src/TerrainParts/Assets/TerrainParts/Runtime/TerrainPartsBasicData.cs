@@ -12,7 +12,7 @@ namespace TerrainParts
             public int Index = 0;
 
             [SerializeField]
-            public float Density = 0.5f;
+            public float DensityPerUnit = 0.1f;
         }
 
         [SerializeField]

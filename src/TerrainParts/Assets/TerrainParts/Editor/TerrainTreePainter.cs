@@ -5,7 +5,7 @@ namespace TerrainParts.Editor
 {
     public class TerrainTreePainter
     {
-        private const int DencityLimit = 100;
+        private const float MaxDencityPerUnit = 2;
         private readonly Terrain _terrain;
         private readonly int _resolution;
         private readonly int _randomSeed;
@@ -70,7 +70,7 @@ namespace TerrainParts.Editor
                                 {
                                     break;
                                 }
-                                var resultDensity = resultAlpha * prototypeData.Density;
+                                var resultDensity = resultAlpha * prototypeData.DensityPerUnit;
                                 var currentDensity = densityMaps[pixelZ, pixelX, prototypeIndex];
                                 densityMaps[pixelZ, pixelX, prototypeIndex] = Mathf.Max(currentDensity, resultDensity);
                             }
@@ -92,13 +92,13 @@ namespace TerrainParts.Editor
                     var localZ = (float)z / _resolution;
                     for (int prototypeIndex = 0; prototypeIndex < prototypeCount; prototypeIndex++)
                     {
-                        var density = Mathf.Min(densityMaps[z, x, prototypeIndex], DencityLimit);
-                        if (density <= 0)
+                        var densityPerUnit = Mathf.Min(densityMaps[z, x, prototypeIndex], MaxDencityPerUnit);
+                        if (densityPerUnit <= 0)
                         {
                             continue;
                         }
-                        var localDensity = pixelArea * density;
-                        var treeCount = Mathf.FloorToInt(localDensity) + (random.NextDouble() < localDensity % 1 ? 1 : 0);
+                        var densityPerPixel = pixelArea * densityPerUnit;
+                        var treeCount = Mathf.FloorToInt(densityPerPixel) + (random.NextDouble() < densityPerPixel % 1 ? 1 : 0);
                         for (var i = 0; i < treeCount; i++)
                         {
                             var position = new Vector3(

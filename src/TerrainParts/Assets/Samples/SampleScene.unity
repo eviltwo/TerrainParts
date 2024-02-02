@@ -214,7 +214,7 @@ MonoBehaviour:
     HoleThreshold: 0
     TreePrototypeDataList:
     - Index: 0
-      Density: 0.5
+      DensityPerUnit: 0.5
     WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
@@ -270,7 +270,7 @@ MonoBehaviour:
     HoleThreshold: 0
     TreePrototypeDataList:
     - Index: 1
-      Density: 0.1
+      DensityPerUnit: 0.1
     WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
@@ -380,9 +380,9 @@ MonoBehaviour:
     HoleThreshold: 0
     TreePrototypeDataList:
     - Index: 0
-      Density: 0.1
+      DensityPerUnit: 0.05
     - Index: 1
-      Density: 0.1
+      DensityPerUnit: 0.05
     WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
@@ -444,7 +444,7 @@ MonoBehaviour:
     HoleThreshold: 0
     TreePrototypeDataList:
     - Index: 1
-      Density: 0.002
+      DensityPerUnit: 0.002
     WriteCondition: 0
     Layer: 2
     OrderInLayer: 0
@@ -1293,7 +1293,7 @@ MonoBehaviour:
     HoleThreshold: 0
     TreePrototypeDataList:
     - Index: 0
-      Density: 0.1
+      DensityPerUnit: 0.1
     WriteCondition: 1
     Layer: 0
     OrderInLayer: 0
