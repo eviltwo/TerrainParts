@@ -62,13 +62,14 @@ namespace TerrainParts.Editor
                         var worldZ = _terrain.transform.position.z + (float)pixelZ / _resolution * terrainData.size.z;
                         if (part.TryGetAlpha(worldX, worldZ, out var resultAlpha))
                         {
-                            for (int prototypeIndex = 0; prototypeIndex < prototypeDataCount; prototypeIndex++)
+                            for (int dataIndex = 0; dataIndex < prototypeDataCount; dataIndex++)
                             {
+                                var prototypeData = basicData.TreePrototypeDataList[dataIndex];
+                                var prototypeIndex = prototypeData.Index;
                                 if (prototypeIndex >= prototypeCount)
                                 {
                                     break;
                                 }
-                                var prototypeData = basicData.TreePrototypeDataList[prototypeIndex];
                                 var resultDensity = resultAlpha * prototypeData.Density;
                                 var currentDensity = densityMaps[pixelZ, pixelX, prototypeIndex];
                                 densityMaps[pixelZ, pixelX, prototypeIndex] = Mathf.Max(currentDensity, resultDensity);
@@ -98,7 +99,7 @@ namespace TerrainParts.Editor
                         }
                         var localDensity = pixelArea * density;
                         var treeCount = Mathf.FloorToInt(localDensity) + (random.NextDouble() < localDensity % 1 ? 1 : 0);
-                        for (var i = 0; i < treeCount && i < 10; i++)
+                        for (var i = 0; i < treeCount; i++)
                         {
                             var position = new Vector3(
                                 localX + (float)random.NextDouble() / _resolution,

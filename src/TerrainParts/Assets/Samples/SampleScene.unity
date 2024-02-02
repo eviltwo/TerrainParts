@@ -208,11 +208,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _alphaTexture: {fileID: 0}
   _basicData:
-    ToolCategory: 6
+    ToolCategory: 22
     TextureLayerIndex: 2
     TextureLayerStrength: 0.5
     HoleThreshold: 0
-    TreePrototypeDataList: []
+    TreePrototypeDataList:
+    - Index: 0
+      Density: 0.5
     WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
@@ -262,11 +264,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   _basicData:
-    ToolCategory: 6
+    ToolCategory: 22
     TextureLayerIndex: 2
     TextureLayerStrength: 1
     HoleThreshold: 0
-    TreePrototypeDataList: []
+    TreePrototypeDataList:
+    - Index: 1
+      Density: 0.1
     WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
@@ -370,11 +374,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   _basicData:
-    ToolCategory: 4
+    ToolCategory: 20
     TextureLayerIndex: 1
     TextureLayerStrength: 1
     HoleThreshold: 0
-    TreePrototypeDataList: []
+    TreePrototypeDataList:
+    - Index: 0
+      Density: 0.1
+    - Index: 1
+      Density: 0.1
     WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
@@ -430,11 +438,13 @@ MonoBehaviour:
   _innerHeightMapWriteCondition: 1
   _innerAlphaMapWriteCondition: 1
   _basicData:
-    ToolCategory: 6
+    ToolCategory: 22
     TextureLayerIndex: 2
     TextureLayerStrength: 1
     HoleThreshold: 0
-    TreePrototypeDataList: []
+    TreePrototypeDataList:
+    - Index: 1
+      Density: 0.002
     WriteCondition: 0
     Layer: 2
     OrderInLayer: 0
