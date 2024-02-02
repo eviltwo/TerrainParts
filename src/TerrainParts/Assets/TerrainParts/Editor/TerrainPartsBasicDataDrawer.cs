@@ -55,6 +55,17 @@ namespace TerrainParts.Editor
             enableHoleToggle.RegisterCallback<ChangeEvent<bool>>(v => holePropertyElement.style.display = v.newValue ? DisplayStyle.Flex : DisplayStyle.None);
             container.Add(holePropertyElement);
 
+            var enableTreeToggle = new Toggle("Edit Tree");
+            enableTreeToggle.value = toolCategoryFlags.HasFlagAll(ToolCategory.Tree);
+            enableTreeToggle.RegisterCallback<ChangeEvent<bool>, ToolCategoryChangedArgs>(OnToolCategoryChanged, new ToolCategoryChangedArgs(ToolCategory.Tree, property));
+            container.Add(enableTreeToggle);
+            var treePropertyElement = new VisualElement();
+            treePropertyElement.style.display = enableTreeToggle.value ? DisplayStyle.Flex : DisplayStyle.None;
+            treePropertyElement.style.paddingLeft = indentSize;
+            treePropertyElement.Add(new PropertyField(property.FindPropertyRelative("TreePrototypeDataList"), "TreePrototypeData"));
+            enableTreeToggle.RegisterCallback<ChangeEvent<bool>>(v => treePropertyElement.style.display = v.newValue ? DisplayStyle.Flex : DisplayStyle.None);
+            container.Add(treePropertyElement);
+
             container.Add(new PropertyField(property.FindPropertyRelative("WriteCondition")));
             container.Add(new PropertyField(property.FindPropertyRelative("Layer")));
             container.Add(new PropertyField(property.FindPropertyRelative("OrderInLayer")));

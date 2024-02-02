@@ -5,6 +5,16 @@ namespace TerrainParts
     [System.Serializable]
     public class TerrainPartsBasicData
     {
+        [System.Serializable]
+        public class TreePrototypeData
+        {
+            [SerializeField]
+            public int Index = 0;
+
+            [SerializeField]
+            public float Density = 0.5f;
+        }
+
         [SerializeField]
         public ToolCategory ToolCategory = ToolCategory.Height;
 
@@ -16,6 +26,9 @@ namespace TerrainParts
 
         [SerializeField]
         public float HoleThreshold = 0.0f;
+
+        [SerializeField]
+        public TreePrototypeData[] TreePrototypeDataList = new TreePrototypeData[0];
 
         [SerializeField]
         public WriteCondition WriteCondition = default;
