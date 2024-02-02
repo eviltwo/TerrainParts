@@ -1,7 +1,5 @@
 # TerrainParts
  Non-destructive terrain modifier for Unity. Place shapes without using terrain paint.
- 
- I made this to use in my game. But anyone can use it freely.
 
 ![terrain-parts-with-tool-window](https://github.com/eviltwo/TerrainParts/assets/7721151/b3c77c5b-ee0d-4625-828c-061cbb63f217)
 
