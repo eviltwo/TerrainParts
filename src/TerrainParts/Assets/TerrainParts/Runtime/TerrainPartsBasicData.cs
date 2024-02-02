@@ -15,6 +15,9 @@ namespace TerrainParts
         public float TextureLayerStrength = 1.0f;
 
         [SerializeField]
+        public float HoleThreshold = 0.0f;
+
+        [SerializeField]
         public WriteCondition WriteCondition = default;
 
         [SerializeField]

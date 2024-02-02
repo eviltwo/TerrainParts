@@ -147,6 +147,12 @@ namespace TerrainParts.Editor
                         var partsForTool = parts.Where(p => p.GetBasicData().ToolCategory.HasFlagAll(ToolCategory.Texture));
                         painter.Paint(partsForTool);
                     }
+                    if (_toolCategory.HasFlagAll(ToolCategory.Hole))
+                    {
+                        var painter = new TerrainHolePainter(terrain);
+                        var partsForTool = parts.Where(p => p.GetBasicData().ToolCategory.HasFlagAll(ToolCategory.Hole));
+                        painter.Paint(partsForTool);
+                    }
                 }
                 stopwatch.Stop();
                 Debug.Log($"Rebuild terrain using parts: {stopwatch.ElapsedMilliseconds}ms");
