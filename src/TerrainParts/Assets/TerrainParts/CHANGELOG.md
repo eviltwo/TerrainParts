@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.9.1] - 2024-02-02
+### Changed
+- Refactor calculation scripts.
+- Replace basic data inspector drawer to PropertyDrawer.
+
 ## [0.9.0] - 2024-02-01
 ### Changed
 - Terrain parts modify Terrain texture layer.
