@@ -41,13 +41,10 @@ namespace TerrainParts.Splines
             _splineContainer = GetComponent<SplineContainer>();
         }
 
-        public ToolCategory GetToolCategory() => _basicData.ToolCategory;
-
-        public int GetTextureLayerIndex() => _basicData.TextureLayerIndex;
-
-        public int GetLayer() => _basicData.Layer;
-
-        public int GetOrderInLayer() => _basicData.OrderInLayer;
+        public TerrainPartsBasicData GetBasicData()
+        {
+            return _basicData;
+        }
 
         public void Setup(float unitPerPixel)
         {

@@ -23,13 +23,10 @@ namespace TerrainParts
         private float _cachedRightY;
         private float _cachedForwardY;
 
-        public ToolCategory GetToolCategory() => _basicData.ToolCategory;
-
-        public int GetTextureLayerIndex() => _basicData.TextureLayerIndex;
-
-        public int GetLayer() => _basicData.Layer;
-
-        public int GetOrderInLayer() => _basicData.OrderInLayer;
+        public TerrainPartsBasicData GetBasicData()
+        {
+            return _basicData;
+        }
 
         public void GetRect(out float minX, out float minZ, out float maxX, out float maxZ)
         {

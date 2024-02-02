@@ -26,12 +26,14 @@ namespace TerrainParts
 
         public static int CompareOrderInLayer(ITerrainParts a, ITerrainParts b)
         {
-            var layer = a.GetLayer().CompareTo(b.GetLayer());
+            var basicDataA = a.GetBasicData();
+            var basicDataB = b.GetBasicData();
+            var layer = basicDataA.Layer.CompareTo(basicDataB.Layer);
             if (layer != 0)
             {
                 return layer;
             }
-            return a.GetOrderInLayer().CompareTo(b.GetOrderInLayer());
+            return basicDataA.OrderInLayer.CompareTo(basicDataB.OrderInLayer);
         }
     }
 }

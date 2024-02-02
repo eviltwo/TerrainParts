@@ -31,7 +31,8 @@ namespace TerrainParts.Editor
 
             foreach (var part in parts)
             {
-                var partLayer = part.GetTextureLayerIndex();
+                var basicData = part.GetBasicData();
+                var partLayer = basicData.TextureLayerIndex;
                 if (partLayer >= layerCount)
                 {
                     continue;

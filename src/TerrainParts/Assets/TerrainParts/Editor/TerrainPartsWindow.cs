@@ -81,8 +81,9 @@ namespace TerrainParts.Editor
                         using (new GUILayout.HorizontalScope())
                         {
                             EditorGUILayout.LabelField(component.gameObject.name, GUILayout.MaxWidth(LabelWidth));
-                            EditorGUILayout.LabelField(part.GetLayer().ToString(), GUILayout.MaxWidth(ValueWidth));
-                            EditorGUILayout.LabelField(part.GetOrderInLayer().ToString(), GUILayout.MaxWidth(ValueWidth));
+                            var basicData = part.GetBasicData();
+                            EditorGUILayout.LabelField(basicData.Layer.ToString(), GUILayout.MaxWidth(ValueWidth));
+                            EditorGUILayout.LabelField(basicData.OrderInLayer.ToString(), GUILayout.MaxWidth(ValueWidth));
                         }
                     }
                 }
@@ -123,7 +124,7 @@ namespace TerrainParts.Editor
             {
                 var stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
-                var parts = FindObjectsOfInterface<ITerrainParts>().Where(p => p.GetToolCategory().HasFlagAny(_toolCategory)).ToList();
+                var parts = FindObjectsOfInterface<ITerrainParts>().Where(p => p.GetBasicData().ToolCategory.HasFlagAny(_toolCategory)).ToList();
                 parts.Sort(TerrainPartsUtility.CompareOrderInLayer);
                 for (int i = 0; i < terrainCount; i++)
                 {
@@ -136,14 +137,14 @@ namespace TerrainParts.Editor
 
                     if (_toolCategory.HasFlagAll(ToolCategory.Height))
                     {
-                        var builder = new TerrainHeightPainter(terrain);
-                        var partsForTool = parts.Where(p => p.GetToolCategory().HasFlagAll(ToolCategory.Height));
-                        builder.Paint(partsForTool);
+                        var painter = new TerrainHeightPainter(terrain);
+                        var partsForTool = parts.Where(p => p.GetBasicData().ToolCategory.HasFlagAll(ToolCategory.Height));
+                        painter.Paint(partsForTool);
                     }
                     if (_toolCategory.HasFlagAll(ToolCategory.Texture))
                     {
                         var painter = new TerrainTexturePainter(terrain);
-                        var partsForTool = parts.Where(p => p.GetToolCategory().HasFlagAll(ToolCategory.Texture));
+                        var partsForTool = parts.Where(p => p.GetBasicData().ToolCategory.HasFlagAll(ToolCategory.Texture));
                         painter.Paint(partsForTool);
                     }
                 }
