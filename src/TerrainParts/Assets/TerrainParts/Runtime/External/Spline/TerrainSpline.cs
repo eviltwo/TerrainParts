@@ -219,7 +219,7 @@ namespace TerrainParts.Splines
             }
         }
 
-        public bool GetHeight(float worldX, float worldZ, out float resultHeight, out float resultAlpha)
+        public bool TryGetHeight(float worldX, float worldZ, out float resultHeight, out float resultAlpha)
         {
             if (_innerHeightMap == null || _innerAlphaMap == null)
             {
@@ -244,18 +244,19 @@ namespace TerrainParts.Splines
             return true;
         }
 
-        public float GetAlpha(float worldX, float worldZ, float currentAlpha)
+        public bool TryGetAlpha(float worldX, float worldZ, out float resultAlpha)
         {
             if (_innerHeightMap == null)
             {
-                return currentAlpha;
+                resultAlpha = 0;
+                return false;
             }
 
             var mapPosition = new Vector2(
                 (worldX - _mapMin.x) / (_mapMax.x - _mapMin.x) * _mapResolution.x,
                 (worldZ - _mapMin.y) / (_mapMax.y - _mapMin.y) * _mapResolution.y);
-            var alpha = _basicData.Strength * GetValueFromMap(_innerAlphaMap, _mapResolution, mapPosition);
-            return Mathf.Clamp01(currentAlpha + alpha);
+            resultAlpha = _basicData.Strength * GetValueFromMap(_innerAlphaMap, _mapResolution, mapPosition);
+            return true;
         }
 
         private static float GetValueFromMap(float[,] map, Vector2Int mapResolution, Vector2 mapPosition)

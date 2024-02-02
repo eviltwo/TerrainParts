@@ -5,7 +5,7 @@ namespace TerrainParts
         TerrainPartsBasicData GetBasicData();
         void GetRect(out float minX, out float minZ, out float maxX, out float maxZ);
         void Setup(float unitPerPixel);
-        bool GetHeight(float worldX, float worldZ, out float height, out float alpha);
-        float GetAlpha(float worldX, float worldZ, float currentAlpha);
+        bool TryGetHeight(float worldX, float worldZ, out float height, out float alpha);
+        bool TryGetAlpha(float worldX, float worldZ, out float alpha);
     }
 }

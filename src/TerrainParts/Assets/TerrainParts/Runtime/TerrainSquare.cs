@@ -56,7 +56,7 @@ namespace TerrainParts
             _cachedForwardY = FitToSurface(transform.position + Vector3.forward).y;
         }
 
-        public bool GetHeight(float worldX, float worldZ, out float resultHeight, out float resultAlpha)
+        public bool TryGetHeight(float worldX, float worldZ, out float resultHeight, out float resultAlpha)
         {
             var surface = FitToSurfaceWithCache(new Vector3(worldX, 0, worldZ));
             var localSurface = transform.InverseTransformPoint(surface);
@@ -73,18 +73,19 @@ namespace TerrainParts
             return true;
         }
 
-        public float GetAlpha(float worldX, float worldZ, float currentAlpha)
+        public bool TryGetAlpha(float worldX, float worldZ, out float resultAlpha)
         {
             var surface = FitToSurfaceWithCache(new Vector3(worldX, 0, worldZ));
             var localSurface = transform.InverseTransformPoint(surface);
             var isInside = localSurface.x >= -0.5f && localSurface.x <= 0.5f && localSurface.z >= -0.5f && localSurface.z <= 0.5f;
             if (!isInside)
             {
-                return currentAlpha;
+                resultAlpha = 0;
+                return false;
             }
             var color = _copiedTexture.GetPixelBilinear(Mathf.Clamp01(localSurface.x + 0.5f), Mathf.Clamp01(localSurface.z + 0.5f));
-            var alpha = _basicData.Strength * Mathf.Clamp01(color.a);
-            return Mathf.Clamp01(currentAlpha + alpha);
+            resultAlpha = _basicData.Strength * Mathf.Clamp01(color.a);
+            return true;
         }
 
         private void OnDrawGizmosSelected()

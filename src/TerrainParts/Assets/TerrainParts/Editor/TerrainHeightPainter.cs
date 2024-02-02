@@ -47,7 +47,7 @@ namespace TerrainParts.Editor
                         var pixelZ = baseZ + z;
                         var worldX = _terrain.transform.position.x + (float)pixelX / resolution * terrainData.size.x;
                         var worldZ = _terrain.transform.position.z + (float)pixelZ / resolution * terrainData.size.z;
-                        if (part.GetHeight(worldX, worldZ, out var resultHeight, out var resultAlpha))
+                        if (part.TryGetHeight(worldX, worldZ, out var resultHeight, out var resultAlpha))
                         {
                             resultHeight -= _terrain.transform.position.y;
                             var currentHeight = heightMap[pixelZ, pixelX] * terrainData.size.y;

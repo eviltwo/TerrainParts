@@ -56,8 +56,12 @@ namespace TerrainParts.Editor
                         var pixelZ = baseZ + z;
                         var worldX = _terrain.transform.position.x + (float)pixelX / resolution * terrainData.size.x;
                         var worldZ = _terrain.transform.position.z + (float)pixelZ / resolution * terrainData.size.z;
-                        var currentAlpha = alphaMaps[pixelZ, pixelX, partLayer];
-                        Blend(alphaMaps, pixelX, pixelZ, layerCount, partLayer, part.GetAlpha(worldX, worldZ, currentAlpha));
+                        if (part.TryGetAlpha(worldX, worldZ, out var resultAlpha))
+                        {
+                            var currentAlpha = alphaMaps[pixelZ, pixelX, partLayer];
+                            var mergedAlpha = Mathf.Clamp01(currentAlpha + resultAlpha);
+                            Blend(alphaMaps, pixelX, pixelZ, layerCount, partLayer, mergedAlpha);
+                        }
                     }
                 }
             }
