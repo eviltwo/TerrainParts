@@ -18,6 +18,7 @@ https://github.com/eviltwo/TerrainParts.git?path=src/TerrainParts/Assets/Terrain
   - Terrain does not update automatically, so press the button every time after editing.
 
 # Features
+[Changelog](https://github.com/eviltwo/TerrainParts/blob/main/src/TerrainParts/Assets/TerrainParts/CHANGELOG.md)
 | Feature | Status |
 | --- | --- |
 | Sort processing order | Included |
