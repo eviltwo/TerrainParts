@@ -27,6 +27,7 @@ namespace TerrainParts.Editor
 
             foreach (var part in parts)
             {
+                var basicData = part.GetBasicData();
                 part.GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
                 minX = Mathf.Max(minX - _terrain.transform.position.x, 0);
                 minZ = Mathf.Max(minZ - _terrain.transform.position.z, 0);
@@ -46,8 +47,15 @@ namespace TerrainParts.Editor
                         var pixelZ = baseZ + z;
                         var worldX = _terrain.transform.position.x + (float)pixelX / resolution * terrainData.size.x;
                         var worldZ = _terrain.transform.position.z + (float)pixelZ / resolution * terrainData.size.z;
-                        var currentHeight = heightMap[pixelZ, pixelX] * terrainData.size.y + _terrain.transform.position.y;
-                        heightMap[pixelZ, pixelX] = (part.GetHeight(worldX, worldZ, currentHeight) - _terrain.transform.position.y) / terrainData.size.y;
+                        if (part.GetHeight(worldX, worldZ, out var resultHeight, out var resultAlpha))
+                        {
+                            resultHeight -= _terrain.transform.position.y;
+                            var currentHeight = heightMap[pixelZ, pixelX] * terrainData.size.y;
+                            var mergedHeight = TerrainPartsUtility.MergeHeight(currentHeight, resultHeight, basicData.WriteCondition);
+                            var smoothedHeight = Mathf.Lerp(currentHeight, mergedHeight, resultAlpha);
+                            heightMap[pixelZ, pixelX] = smoothedHeight / terrainData.size.y;
+                        }
+
                     }
                 }
             }

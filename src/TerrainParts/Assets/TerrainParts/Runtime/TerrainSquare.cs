@@ -56,19 +56,21 @@ namespace TerrainParts
             _cachedForwardY = FitToSurface(transform.position + Vector3.forward).y;
         }
 
-        public float GetHeight(float worldX, float worldZ, float currentHeight)
+        public bool GetHeight(float worldX, float worldZ, out float resultHeight, out float resultAlpha)
         {
             var surface = FitToSurfaceWithCache(new Vector3(worldX, 0, worldZ));
             var localSurface = transform.InverseTransformPoint(surface);
             var isInside = localSurface.x >= -0.5f && localSurface.x <= 0.5f && localSurface.z >= -0.5f && localSurface.z <= 0.5f;
             if (!isInside)
             {
-                return currentHeight;
+                resultHeight = 0;
+                resultAlpha = 0;
+                return false;
             }
-            var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, surface.y, _basicData.WriteCondition);
+            resultHeight = surface.y;
             var color = _copiedTexture.GetPixelBilinear(Mathf.Clamp01(localSurface.x + 0.5f), Mathf.Clamp01(localSurface.z + 0.5f));
-            var alpha = Mathf.Clamp01(color.a);
-            return Mathf.Lerp(currentHeight, targetHeight, alpha);
+            resultAlpha = Mathf.Clamp01(color.a);
+            return true;
         }
 
         public float GetAlpha(float worldX, float worldZ, float currentAlpha)
@@ -111,7 +113,6 @@ namespace TerrainParts
             }
             else
             {
-                Debug.LogError($"Failed to fit surface. {transform.position}, {worldPosition}");
                 return worldPosition;
             }
         }

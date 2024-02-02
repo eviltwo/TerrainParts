@@ -219,11 +219,13 @@ namespace TerrainParts.Splines
             }
         }
 
-        public float GetHeight(float worldX, float worldZ, float currentHeight)
+        public bool GetHeight(float worldX, float worldZ, out float resultHeight, out float resultAlpha)
         {
             if (_innerHeightMap == null || _innerAlphaMap == null)
             {
-                return currentHeight;
+                resultHeight = 0;
+                resultAlpha = 0;
+                return false;
             }
 
             var mapPosition = new Vector2(
@@ -232,12 +234,14 @@ namespace TerrainParts.Splines
             var innerMapHeight = GetValueFromMap(_innerHeightMap, _mapResolution, mapPosition);
             if (innerMapHeight == float.MinValue)
             {
-                return currentHeight;
+                resultHeight = 0;
+                resultAlpha = 0;
+                return false;
             }
 
-            var targetHeight = TerrainPartsUtility.MergeHeight(currentHeight, innerMapHeight, _basicData.WriteCondition);
-            var alpha = GetValueFromMap(_innerAlphaMap, _mapResolution, mapPosition);
-            return Mathf.Lerp(currentHeight, targetHeight, alpha);
+            resultHeight = innerMapHeight;
+            resultAlpha = GetValueFromMap(_innerAlphaMap, _mapResolution, mapPosition);
+            return true;
         }
 
         public float GetAlpha(float worldX, float worldZ, float currentAlpha)
