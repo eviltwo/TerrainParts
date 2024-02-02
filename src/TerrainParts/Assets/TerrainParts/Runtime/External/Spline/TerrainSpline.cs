@@ -255,7 +255,7 @@ namespace TerrainParts.Splines
             var mapPosition = new Vector2(
                 (worldX - _mapMin.x) / (_mapMax.x - _mapMin.x) * _mapResolution.x,
                 (worldZ - _mapMin.y) / (_mapMax.y - _mapMin.y) * _mapResolution.y);
-            resultAlpha = _basicData.Strength * GetValueFromMap(_innerAlphaMap, _mapResolution, mapPosition);
+            resultAlpha = GetValueFromMap(_innerAlphaMap, _mapResolution, mapPosition);
             return true;
         }
 

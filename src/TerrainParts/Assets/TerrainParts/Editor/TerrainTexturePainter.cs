@@ -58,6 +58,7 @@ namespace TerrainParts.Editor
                         var worldZ = _terrain.transform.position.z + (float)pixelZ / resolution * terrainData.size.z;
                         if (part.TryGetAlpha(worldX, worldZ, out var resultAlpha))
                         {
+                            resultAlpha *= basicData.TextureLayerStrength;
                             var currentAlpha = alphaMaps[pixelZ, pixelX, partLayer];
                             var mergedAlpha = Mathf.Clamp01(currentAlpha + resultAlpha);
                             Blend(alphaMaps, pixelX, pixelZ, layerCount, partLayer, mergedAlpha);

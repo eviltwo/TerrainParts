@@ -13,7 +13,7 @@ namespace TerrainParts.Editor
                 using (new EditorGUI.IndentLevelScope())
                 {
                     EditorGUILayout.PropertyField(property.FindPropertyRelative("TextureLayerIndex"));
-                    EditorGUILayout.PropertyField(property.FindPropertyRelative("Strength"));
+                    EditorGUILayout.PropertyField(property.FindPropertyRelative("TextureLayerStrength"));
                 }
             }
             EditorGUILayout.PropertyField(property.FindPropertyRelative("WriteCondition"));

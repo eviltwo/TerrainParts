@@ -84,7 +84,7 @@ namespace TerrainParts
                 return false;
             }
             var color = _copiedTexture.GetPixelBilinear(Mathf.Clamp01(localSurface.x + 0.5f), Mathf.Clamp01(localSurface.z + 0.5f));
-            resultAlpha = _basicData.Strength * Mathf.Clamp01(color.a);
+            resultAlpha = Mathf.Clamp01(color.a);
             return true;
         }
 

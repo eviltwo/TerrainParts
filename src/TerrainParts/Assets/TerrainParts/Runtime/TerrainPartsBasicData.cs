@@ -12,7 +12,7 @@ namespace TerrainParts
         public int TextureLayerIndex = 1;
 
         [SerializeField]
-        public float Strength = 1.0f;
+        public float TextureLayerStrength = 1.0f;
 
         [SerializeField]
         public WriteCondition WriteCondition = default;
