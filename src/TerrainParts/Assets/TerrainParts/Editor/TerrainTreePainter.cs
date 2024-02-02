@@ -105,9 +105,11 @@ namespace TerrainParts.Editor
                                 localX + (float)random.NextDouble() / _resolution,
                                 0,
                                 localZ + (float)random.NextDouble() / _resolution);
+                            var rotation = (float)random.NextDouble() * 2 * Mathf.PI;
                             var treeInstance = new TreeInstance
                             {
                                 position = position,
+                                rotation = rotation,
                                 prototypeIndex = prototypeIndex,
                                 widthScale = 1,
                                 heightScale = 1,
