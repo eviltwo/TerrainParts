@@ -1,6 +1,9 @@
 # Changelog
 
-## [0.9.1] - 2024-02-02
+## [0.9.2] - 2024-02-02
+### Added
+- HolePainter
+
 ### Changed
 - Refactor calculation scripts.
 - Replace basic data inspector drawer to PropertyDrawer.
