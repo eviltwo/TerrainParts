@@ -136,9 +136,9 @@ namespace TerrainParts.Editor
 
                     if (_toolCategory.HasFlagAll(ToolCategory.Height))
                     {
-                        var builder = new TerrainBuilder(terrain);
+                        var builder = new TerrainHeightPainter(terrain);
                         var partsForTool = parts.Where(p => p.GetToolCategory().HasFlagAll(ToolCategory.Height));
-                        builder.Build(partsForTool);
+                        builder.Paint(partsForTool);
                     }
                     if (_toolCategory.HasFlagAll(ToolCategory.Texture))
                     {

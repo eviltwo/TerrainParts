@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace TerrainParts.Editor
 {
-    public class TerrainBuilder
+    public class TerrainHeightPainter
     {
         private readonly Terrain _terrain;
 
-        public TerrainBuilder(Terrain terrain)
+        public TerrainHeightPainter(Terrain terrain)
         {
             _terrain = terrain;
         }
 
-        public void Build(IEnumerable<ITerrainParts> parts)
+        public void Paint(IEnumerable<ITerrainParts> parts)
         {
             var terrainData = _terrain.terrainData;
             var resolution = terrainData.heightmapResolution;
