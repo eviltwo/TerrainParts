@@ -3,12 +3,7 @@
  
  I made this to use in my game. But anyone can use it freely.
 
-![image](https://github.com/eviltwo/TerrainParts/assets/7721151/4dd2a7ce-67ae-4188-b6e5-20cd1bdeb4bb)
-
-![image](https://github.com/eviltwo/TerrainParts/assets/7721151/b224b63d-0d6a-484c-a74f-b6313ec82ff4)
-
-![image](https://github.com/eviltwo/TerrainParts/assets/7721151/49e198c1-9099-45a2-9f42-87b588e8fb59)
-
+![terrain-parts-with-tool-window](https://github.com/eviltwo/TerrainParts/assets/7721151/b3c77c5b-ee0d-4625-828c-061cbb63f217)
 
 # Install with UPM
 ```
