@@ -8,13 +8,13 @@ namespace TerrainParts.Editor
         private const float MaxDencityPerUnit = 2;
         private readonly Terrain _terrain;
         private readonly int _resolution;
-        private readonly int _randomSeed;
+        private readonly System.Random _random;
 
-        public TerrainTreePainter(Terrain terrain, int resolution, int randomSeed)
+        public TerrainTreePainter(Terrain terrain, int resolution, System.Random random)
         {
             _terrain = terrain;
             _resolution = resolution;
-            _randomSeed = randomSeed;
+            _random = random;
         }
 
         public void Paint(IEnumerable<ITerrainParts> parts)
@@ -82,7 +82,6 @@ namespace TerrainParts.Editor
             var pixelSizeX = _terrain.terrainData.size.x / _resolution;
             var pixelSizeZ = _terrain.terrainData.size.z / _resolution;
             var pixelArea = pixelSizeX * pixelSizeZ;
-            var random = new System.Random(_randomSeed);
             var treeInstances = new List<TreeInstance>();
             for (var x = 0; x < _resolution; x++)
             {
@@ -98,14 +97,14 @@ namespace TerrainParts.Editor
                             continue;
                         }
                         var densityPerPixel = pixelArea * densityPerUnit;
-                        var treeCount = Mathf.FloorToInt(densityPerPixel) + (random.NextDouble() < densityPerPixel % 1 ? 1 : 0);
+                        var treeCount = Mathf.FloorToInt(densityPerPixel) + (_random.NextDouble() < densityPerPixel % 1 ? 1 : 0);
                         for (var i = 0; i < treeCount; i++)
                         {
                             var position = new Vector3(
-                                localX + (float)random.NextDouble() / _resolution,
+                                localX + (float)_random.NextDouble() / _resolution,
                                 0,
-                                localZ + (float)random.NextDouble() / _resolution);
-                            var rotation = (float)random.NextDouble() * 2 * Mathf.PI;
+                                localZ + (float)_random.NextDouble() / _resolution);
+                            var rotation = (float)_random.NextDouble() * 2 * Mathf.PI;
                             var treeInstance = new TreeInstance
                             {
                                 position = position,
@@ -123,7 +122,6 @@ namespace TerrainParts.Editor
             }
 
             terrainData.SetTreeInstances(treeInstances.ToArray(), true);
-            Debug.Log(terrainData.treeInstanceCount);
         }
     }
 }
