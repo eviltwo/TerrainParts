@@ -8,6 +8,7 @@ namespace TerrainParts
         Texture = 1 << 2,
         Hole = 1 << 3,
         Tree = 1 << 4,
+        Detail = 1 << 5,
     }
 
     public static class ToolCategoryExtention
