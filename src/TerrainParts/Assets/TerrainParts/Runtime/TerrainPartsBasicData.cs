@@ -15,6 +15,16 @@ namespace TerrainParts
             public float DensityPerUnit = 0.1f;
         }
 
+        [System.Serializable]
+        public class DetailPrototypeData
+        {
+            [SerializeField]
+            public int Index = 0;
+
+            [SerializeField]
+            public int Density = 1;
+        }
+
         [SerializeField]
         public ToolCategory ToolCategory = ToolCategory.Height;
 
@@ -29,6 +39,9 @@ namespace TerrainParts
 
         [SerializeField]
         public TreePrototypeData[] TreePrototypeDataList = new TreePrototypeData[0];
+
+        [SerializeField]
+        public DetailPrototypeData[] DetailPrototypeDataList = new DetailPrototypeData[0];
 
         [SerializeField]
         public WriteCondition WriteCondition = default;

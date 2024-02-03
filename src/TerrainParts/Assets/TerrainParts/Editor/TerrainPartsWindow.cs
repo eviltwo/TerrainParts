@@ -192,6 +192,12 @@ namespace TerrainParts.Editor
                         var partsForTool = parts.Where(p => p.GetBasicData().ToolCategory.HasFlagAll(ToolCategory.Tree));
                         painter.Paint(partsForTool);
                     }
+                    if (_toolCategory.HasFlagAll(ToolCategory.Detail))
+                    {
+                        var painter = new TerrainPartsDetailPainter(terrain);
+                        var partsForTool = parts.Where(p => p.GetBasicData().ToolCategory.HasFlagAll(ToolCategory.Detail));
+                        painter.Paint(partsForTool);
+                    }
                 }
 
                 stopwatch.Stop();
