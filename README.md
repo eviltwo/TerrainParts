@@ -25,5 +25,6 @@ https://github.com/eviltwo/TerrainParts.git?path=src/TerrainParts/Assets/Terrain
 | Height modify in spline | Included |
 | Texture layer modify | Included |
 | Hole modify | Included |
+| Tree modify | Included |
+| Details modify | Not yet |
 | More shape textures (.png) | Add when I needed |
-| Tree / Details layer modify | Not yet |
