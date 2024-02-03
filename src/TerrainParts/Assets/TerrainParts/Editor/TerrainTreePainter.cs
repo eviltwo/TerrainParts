@@ -48,9 +48,8 @@ namespace TerrainParts.Editor
                 {
                     for (var y = 0; y < pixelSize.y; y++)
                     {
-                        var pixelX = basePixel.x + x;
-                        var pixelZ = basePixel.y + y;
-                        var worldPos = PainterUtility.PixelToWorld(new Vector2Int(pixelX, pixelZ), densityMapSize, _terrain);
+                        var pixelPos = new Vector2Int(basePixel.x + x, basePixel.y + y);
+                        var worldPos = PainterUtility.PixelToWorld(pixelPos, densityMapSize, _terrain);
                         if (part.TryGetAlpha(worldPos.x, worldPos.z, out var resultAlpha))
                         {
                             for (int dataIndex = 0; dataIndex < prototypeDataCount; dataIndex++)
@@ -62,8 +61,8 @@ namespace TerrainParts.Editor
                                     break;
                                 }
                                 var resultDensity = resultAlpha * prototypeData.DensityPerUnit;
-                                var currentDensity = densityMaps[pixelZ, pixelX, prototypeIndex];
-                                densityMaps[pixelZ, pixelX, prototypeIndex] = Mathf.Max(currentDensity, resultDensity);
+                                var currentDensity = densityMaps[pixelPos.y, pixelPos.x, prototypeIndex];
+                                densityMaps[pixelPos.y, pixelPos.x, prototypeIndex] = Mathf.Max(currentDensity, resultDensity);
                             }
                         }
                     }

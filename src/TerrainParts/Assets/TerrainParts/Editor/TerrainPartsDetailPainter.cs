@@ -16,12 +16,11 @@ namespace TerrainParts.Editor
         {
             var terrainData = _terrain.terrainData;
             var prototypeCount = terrainData.detailPrototypes.Length;
-            var detailWidth = terrainData.detailWidth;
-            var detailHeight = terrainData.detailHeight;
-            var densityIntValueMaps = new int[detailHeight, detailWidth, prototypeCount];
-            for (var x = 0; x < detailWidth; x++)
+            var detailMapSize = new Vector2Int(terrainData.detailWidth, terrainData.detailHeight);
+            var densityIntValueMaps = new int[detailMapSize.y, detailMapSize.x, prototypeCount];
+            for (var x = 0; x < detailMapSize.x; x++)
             {
-                for (var y = 0; y < detailHeight; y++)
+                for (var y = 0; y < detailMapSize.y; y++)
                 {
                     for (var layer = 0; layer < prototypeCount; layer++)
                     {
@@ -39,25 +38,14 @@ namespace TerrainParts.Editor
                     continue;
                 }
                 part.GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
-                minX = Mathf.Max(minX - _terrain.transform.position.x, 0);
-                minZ = Mathf.Max(minZ - _terrain.transform.position.z, 0);
-                maxX = Mathf.Min(maxX - _terrain.transform.position.x, _terrain.terrainData.size.x);
-                maxZ = Mathf.Min(maxZ - _terrain.transform.position.z, _terrain.terrainData.size.z);
-                var baseX = Mathf.CeilToInt(minX / terrainData.size.x * detailWidth);
-                var baseZ = Mathf.CeilToInt(minZ / terrainData.size.z * detailHeight);
-                var exX = Mathf.CeilToInt(maxX / terrainData.size.x * detailWidth);
-                var exZ = Mathf.CeilToInt(maxZ / terrainData.size.z * detailHeight);
-                var xResolution = exX - baseX;
-                var zResolution = exZ - baseZ;
-                for (var x = 0; x < xResolution; x++)
+                PainterUtility.CalculatePixelRange(minX, minZ, maxX, maxZ, _terrain, detailMapSize, out var pixelBase, out var pixelSize);
+                for (var x = 0; x < pixelSize.x; x++)
                 {
-                    for (var z = 0; z < zResolution; z++)
+                    for (var y = 0; y < pixelSize.y; y++)
                     {
-                        var pixelX = baseX + x;
-                        var pixelZ = baseZ + z;
-                        var worldX = _terrain.transform.position.x + (float)pixelX / detailWidth * terrainData.size.x;
-                        var worldZ = _terrain.transform.position.z + (float)pixelZ / detailHeight * terrainData.size.z;
-                        if (part.TryGetAlpha(worldX, worldZ, out var resultAlpha))
+                        var pixelPos = new Vector2Int(pixelBase.x + x, pixelBase.y + y);
+                        Vector3 worldPos = PainterUtility.PixelToWorld(pixelPos, detailMapSize, _terrain);
+                        if (part.TryGetAlpha(worldPos.x, worldPos.z, out var resultAlpha))
                         {
                             for (int dataIndex = 0; dataIndex < prototypeDataCount; dataIndex++)
                             {
@@ -68,8 +56,8 @@ namespace TerrainParts.Editor
                                     break;
                                 }
                                 var resultDensity = Mathf.RoundToInt(resultAlpha * prototypeData.Density);
-                                var currentDensityIntValue = densityIntValueMaps[pixelZ, pixelX, prototypeIndex];
-                                densityIntValueMaps[pixelZ, pixelX, prototypeIndex] = Mathf.Max(currentDensityIntValue, resultDensity);
+                                var currentDensityIntValue = densityIntValueMaps[pixelPos.y, pixelPos.x, prototypeIndex];
+                                densityIntValueMaps[pixelPos.y, pixelPos.x, prototypeIndex] = Mathf.Max(currentDensityIntValue, resultDensity);
                             }
                         }
                     }
@@ -78,10 +66,10 @@ namespace TerrainParts.Editor
 
             for (int prototypeIndex = 0; prototypeIndex < prototypeCount; prototypeIndex++)
             {
-                var layerData = new int[detailWidth, detailHeight];
-                for (int x = 0; x < detailWidth; x++)
+                var layerData = new int[detailMapSize.y, detailMapSize.x];
+                for (int x = 0; x < detailMapSize.x; x++)
                 {
-                    for (int y = 0; y < detailHeight; y++)
+                    for (int y = 0; y < detailMapSize.y; y++)
                     {
                         layerData[y, x] = densityIntValueMaps[y, x, prototypeIndex];
                     }
