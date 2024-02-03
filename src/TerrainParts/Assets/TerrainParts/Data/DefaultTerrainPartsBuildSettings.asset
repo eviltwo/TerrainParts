@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _randomSeed: 0
   _treePainterSettings:
-    _treeDencityMapResolution: 500
+    _treeDensityMapResolution: 500
     _defaultTreeDetail:
       _isHeightRandom: 1
       _heightRandomMin: 1

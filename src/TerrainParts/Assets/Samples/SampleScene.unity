@@ -155,12 +155,12 @@ MonoBehaviour:
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   _basicData:
     ToolCategory: 8
+    HeightWriteCondition: 1
     TextureLayerIndex: 1
     TextureLayerStrength: 1
     HoleThreshold: 0
     TreePrototypeDataList: []
     DetailPrototypeDataList: []
-    WriteCondition: 1
     Layer: 0
     OrderInLayer: 0
 --- !u!4 &34105263
@@ -210,6 +210,7 @@ MonoBehaviour:
   _alphaTexture: {fileID: 0}
   _basicData:
     ToolCategory: 22
+    HeightWriteCondition: 1
     TextureLayerIndex: 2
     TextureLayerStrength: 0.5
     HoleThreshold: 0
@@ -217,7 +218,6 @@ MonoBehaviour:
     - Index: 0
       DensityPerUnit: 0.5
     DetailPrototypeDataList: []
-    WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
 --- !u!4 &216356205
@@ -267,6 +267,7 @@ MonoBehaviour:
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   _basicData:
     ToolCategory: 22
+    HeightWriteCondition: 1
     TextureLayerIndex: 2
     TextureLayerStrength: 1
     HoleThreshold: 0
@@ -274,7 +275,6 @@ MonoBehaviour:
     - Index: 1
       DensityPerUnit: 0.1
     DetailPrototypeDataList: []
-    WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
 --- !u!4 &386652295
@@ -324,12 +324,12 @@ MonoBehaviour:
   _alphaTexture: {fileID: 0}
   _basicData:
     ToolCategory: 6
+    HeightWriteCondition: 0
     TextureLayerIndex: 2
     TextureLayerStrength: 1
     HoleThreshold: 0
     TreePrototypeDataList: []
     DetailPrototypeDataList: []
-    WriteCondition: 0
     Layer: 2
     OrderInLayer: 0
 --- !u!4 &471075417
@@ -379,6 +379,7 @@ MonoBehaviour:
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   _basicData:
     ToolCategory: 52
+    HeightWriteCondition: 1
     TextureLayerIndex: 1
     TextureLayerStrength: 1
     HoleThreshold: 0
@@ -392,7 +393,6 @@ MonoBehaviour:
       Density: 200
     - Index: 1
       Density: 100
-    WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
 --- !u!4 &549712495
@@ -448,6 +448,7 @@ MonoBehaviour:
   _innerAlphaMapWriteCondition: 1
   _basicData:
     ToolCategory: 22
+    HeightWriteCondition: 0
     TextureLayerIndex: 2
     TextureLayerStrength: 1
     HoleThreshold: 0
@@ -455,7 +456,6 @@ MonoBehaviour:
     - Index: 1
       DensityPerUnit: 0.002
     DetailPrototypeDataList: []
-    WriteCondition: 0
     Layer: 2
     OrderInLayer: 0
 --- !u!114 &608726998
@@ -1044,12 +1044,12 @@ MonoBehaviour:
   _alphaTexture: {fileID: 0}
   _basicData:
     ToolCategory: 6
+    HeightWriteCondition: 0
     TextureLayerIndex: 1
     TextureLayerStrength: 1
     HoleThreshold: 0
     TreePrototypeDataList: []
     DetailPrototypeDataList: []
-    WriteCondition: 0
     Layer: 1
     OrderInLayer: 0
 --- !u!4 &755557486
@@ -1099,12 +1099,12 @@ MonoBehaviour:
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   _basicData:
     ToolCategory: 6
+    HeightWriteCondition: 1
     TextureLayerIndex: 1
     TextureLayerStrength: 1
     HoleThreshold: 0
     TreePrototypeDataList: []
     DetailPrototypeDataList: []
-    WriteCondition: 1
     Layer: 0
     OrderInLayer: 0
 --- !u!4 &862256570
@@ -1154,12 +1154,12 @@ MonoBehaviour:
   _alphaTexture: {fileID: 0}
   _basicData:
     ToolCategory: 6
+    HeightWriteCondition: 1
     TextureLayerIndex: 1
     TextureLayerStrength: 1
     HoleThreshold: 0
     TreePrototypeDataList: []
     DetailPrototypeDataList: []
-    WriteCondition: 1
     Layer: 1
     OrderInLayer: 0
 --- !u!4 &871754903
@@ -1301,6 +1301,7 @@ MonoBehaviour:
   _alphaTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   _basicData:
     ToolCategory: 54
+    HeightWriteCondition: 1
     TextureLayerIndex: 1
     TextureLayerStrength: 1
     HoleThreshold: 0
@@ -1310,7 +1311,6 @@ MonoBehaviour:
     DetailPrototypeDataList:
     - Index: 0
       Density: 100
-    WriteCondition: 1
     Layer: 0
     OrderInLayer: 0
 --- !u!4 &1361712756

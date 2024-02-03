@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.5] - 2024-02-03
+### Added
+- Refactor painters.
+
 ## [0.9.4] - 2024-02-03
 ### Added
 - TreePainter

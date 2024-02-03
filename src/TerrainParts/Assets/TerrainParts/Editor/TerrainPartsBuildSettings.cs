@@ -20,9 +20,9 @@ namespace TerrainParts.Editor
     public class TreePainterSettings
     {
         [SerializeField]
-        private int _treeDencityMapResolution = 500;
+        private int _treeDensityMapResolution = 500;
 
-        public int TreeDencityMapResolution => _treeDencityMapResolution;
+        public int TreeDensityMapResolution => _treeDensityMapResolution;
 
         [System.Serializable]
         public class TreeDetail

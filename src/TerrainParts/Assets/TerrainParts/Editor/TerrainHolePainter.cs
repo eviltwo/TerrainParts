@@ -15,13 +15,13 @@ namespace TerrainParts.Editor
         public void Paint(IEnumerable<ITerrainParts> parts)
         {
             var terrainData = _terrain.terrainData;
-            var resolution = terrainData.alphamapResolution;
-            var boolMap = new bool[resolution, resolution];
-            for (var x = 0; x < resolution; x++)
+            var resolution = new Vector2Int(terrainData.holesResolution, terrainData.holesResolution);
+            var boolMap = new bool[resolution.y, resolution.x];
+            for (var x = 0; x < resolution.x; x++)
             {
-                for (var y = 0; y < resolution; y++)
+                for (var y = 0; y < resolution.y; y++)
                 {
-                    boolMap[x, y] = true;
+                    boolMap[y, x] = true;
                 }
             }
 
@@ -29,28 +29,17 @@ namespace TerrainParts.Editor
             {
                 var basicData = part.GetBasicData();
                 part.GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
-                minX = Mathf.Max(minX - _terrain.transform.position.x, 0);
-                minZ = Mathf.Max(minZ - _terrain.transform.position.z, 0);
-                maxX = Mathf.Min(maxX - _terrain.transform.position.x, _terrain.terrainData.size.x);
-                maxZ = Mathf.Min(maxZ - _terrain.transform.position.z, _terrain.terrainData.size.z);
-                var baseX = Mathf.CeilToInt(minX / terrainData.size.x * resolution);
-                var baseZ = Mathf.CeilToInt(minZ / terrainData.size.z * resolution);
-                var exX = Mathf.CeilToInt(maxX / terrainData.size.x * resolution);
-                var exZ = Mathf.CeilToInt(maxZ / terrainData.size.z * resolution);
-                var xResolution = exX - baseX;
-                var zResolution = exZ - baseZ;
-                for (var x = 0; x < xResolution; x++)
+                PainterUtility.CalculatePixelRange(minX, minZ, maxX, maxZ, _terrain, resolution, out var pixelBase, out var pixelSize);
+                for (var x = 0; x < pixelSize.x; x++)
                 {
-                    for (var z = 0; z < zResolution; z++)
+                    for (var y = 0; y < pixelSize.y; y++)
                     {
-                        var pixelX = baseX + x;
-                        var pixelZ = baseZ + z;
-                        var worldX = _terrain.transform.position.x + (float)pixelX / resolution * terrainData.size.x;
-                        var worldZ = _terrain.transform.position.z + (float)pixelZ / resolution * terrainData.size.z;
-                        if (part.TryGetAlpha(worldX, worldZ, out var resultAlpha))
+                        var pixelPos = new Vector2Int(pixelBase.x + x, pixelBase.y + y);
+                        var worldPos = PainterUtility.PixelToWorld(pixelPos, resolution, _terrain);
+                        if (part.TryGetAlpha(worldPos.x, worldPos.z, out var resultAlpha))
                         {
                             var digHole = resultAlpha > basicData.HoleThreshold;
-                            boolMap[pixelZ, pixelX] = !digHole;
+                            boolMap[pixelPos.y, pixelPos.x] = !digHole;
                         }
                     }
                 }

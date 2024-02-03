@@ -30,6 +30,12 @@ namespace TerrainParts.Editor
             enableHeightToggle.value = toolCategoryFlags.HasFlagAll(ToolCategory.Height);
             enableHeightToggle.RegisterCallback<ChangeEvent<bool>, ToolCategoryChangedArgs>(OnToolCategoryChanged, new ToolCategoryChangedArgs(ToolCategory.Height, property));
             container.Add(enableHeightToggle);
+            var heightPropertyElement = new VisualElement();
+            heightPropertyElement.style.display = enableHeightToggle.value ? DisplayStyle.Flex : DisplayStyle.None;
+            heightPropertyElement.style.paddingLeft = indentSize;
+            heightPropertyElement.Add(new PropertyField(property.FindPropertyRelative("HeightWriteCondition"), "WriteCondition"));
+            enableHeightToggle.RegisterCallback<ChangeEvent<bool>>(v => heightPropertyElement.style.display = v.newValue ? DisplayStyle.Flex : DisplayStyle.None);
+            container.Add(heightPropertyElement);
 
             var enableTextureToggle = new Toggle("Edit Texture");
             enableTextureToggle.value = toolCategoryFlags.HasFlagAll(ToolCategory.Texture);
@@ -77,7 +83,6 @@ namespace TerrainParts.Editor
             enableDetailToggle.RegisterCallback<ChangeEvent<bool>>(v => detailPropertyElement.style.display = v.newValue ? DisplayStyle.Flex : DisplayStyle.None);
             container.Add(detailPropertyElement);
 
-            container.Add(new PropertyField(property.FindPropertyRelative("WriteCondition")));
             container.Add(new PropertyField(property.FindPropertyRelative("Layer")));
             container.Add(new PropertyField(property.FindPropertyRelative("OrderInLayer")));
             return container;

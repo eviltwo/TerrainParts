@@ -194,7 +194,7 @@ namespace TerrainParts.Editor
                     }
                     if (_toolCategory.HasFlagAll(ToolCategory.Detail))
                     {
-                        var painter = new TerrainPartsDetailPainter(terrain);
+                        var painter = new TerrainDetailPainter(terrain);
                         var partsForTool = parts.Where(p => p.GetBasicData().ToolCategory.HasFlagAll(ToolCategory.Detail));
                         painter.Paint(partsForTool);
                     }
