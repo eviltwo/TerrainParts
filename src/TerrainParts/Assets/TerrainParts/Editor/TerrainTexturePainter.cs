@@ -16,15 +16,15 @@ namespace TerrainParts.Editor
         {
             var terrainData = _terrain.terrainData;
             var layerCount = terrainData.alphamapLayers;
-            var resolution = terrainData.alphamapResolution;
-            var alphaMaps = new float[resolution, resolution, layerCount];
-            for (var x = 0; x < resolution; x++)
+            var resolution = new Vector2Int(terrainData.alphamapWidth, terrainData.alphamapHeight);
+            var alphaMaps = new float[resolution.y, resolution.x, layerCount];
+            for (var x = 0; x < resolution.x; x++)
             {
-                for (var y = 0; y < resolution; y++)
+                for (var y = 0; y < resolution.y; y++)
                 {
                     for (var layer = 0; layer < layerCount; layer++)
                     {
-                        alphaMaps[x, y, layer] = layer == 0 ? 1 : 0;
+                        alphaMaps[y, x, layer] = layer == 0 ? 1 : 0;
                     }
                 }
             }
@@ -38,38 +38,27 @@ namespace TerrainParts.Editor
                     continue;
                 }
                 part.GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
-                minX = Mathf.Max(minX - _terrain.transform.position.x, 0);
-                minZ = Mathf.Max(minZ - _terrain.transform.position.z, 0);
-                maxX = Mathf.Min(maxX - _terrain.transform.position.x, _terrain.terrainData.size.x);
-                maxZ = Mathf.Min(maxZ - _terrain.transform.position.z, _terrain.terrainData.size.z);
-                var baseX = Mathf.CeilToInt(minX / terrainData.size.x * resolution);
-                var baseZ = Mathf.CeilToInt(minZ / terrainData.size.z * resolution);
-                var exX = Mathf.CeilToInt(maxX / terrainData.size.x * resolution);
-                var exZ = Mathf.CeilToInt(maxZ / terrainData.size.z * resolution);
-                var xResolution = exX - baseX;
-                var zResolution = exZ - baseZ;
-                for (var x = 0; x < xResolution; x++)
+                PainterUtility.CalculatePixelRange(minX, minZ, maxX, maxZ, _terrain, resolution, out var pixelBase, out var pixelSize);
+                for (var x = 0; x < pixelSize.x; x++)
                 {
-                    for (var z = 0; z < zResolution; z++)
+                    for (var y = 0; y < pixelSize.y; y++)
                     {
-                        var pixelX = baseX + x;
-                        var pixelZ = baseZ + z;
-                        var worldX = _terrain.transform.position.x + (float)pixelX / resolution * terrainData.size.x;
-                        var worldZ = _terrain.transform.position.z + (float)pixelZ / resolution * terrainData.size.z;
-                        if (part.TryGetAlpha(worldX, worldZ, out var resultAlpha))
+                        var pixelPos = new Vector2Int(pixelBase.x + x, pixelBase.y + y);
+                        var worldPos = PainterUtility.PixelToWorld(pixelPos, resolution, _terrain);
+                        if (part.TryGetAlpha(worldPos.x, worldPos.z, out var resultAlpha))
                         {
                             resultAlpha *= basicData.TextureLayerStrength;
-                            var currentAlpha = alphaMaps[pixelZ, pixelX, partLayer];
+                            var currentAlpha = alphaMaps[pixelPos.y, pixelPos.x, partLayer];
                             var mergedAlpha = Mathf.Clamp01(currentAlpha + resultAlpha);
-                            Blend(alphaMaps, pixelX, pixelZ, layerCount, partLayer, mergedAlpha);
+                            Blend(alphaMaps, pixelPos, layerCount, partLayer, mergedAlpha);
                         }
                     }
                 }
             }
 
-            for (var x = 0; x < resolution; x++)
+            for (var x = 0; x < resolution.x; x++)
             {
-                for (var y = 0; y < resolution; y++)
+                for (var y = 0; y < resolution.y; y++)
                 {
                     var totalAlpha = 0f;
                     for (var layer = 1; layer < layerCount; layer++)
@@ -83,9 +72,9 @@ namespace TerrainParts.Editor
             terrainData.SetAlphamaps(0, 0, alphaMaps);
         }
 
-        public static void Blend(float[,,] alphaMap, int x, int z, int layerCount, int targetLayer, float tagetAlpha)
+        public static void Blend(float[,,] alphaMap, Vector2Int pixelPos, int layerCount, int targetLayer, float tagetAlpha)
         {
-            alphaMap[z, x, targetLayer] = Mathf.Clamp01(tagetAlpha);
+            alphaMap[pixelPos.y, pixelPos.x, targetLayer] = Mathf.Clamp01(tagetAlpha);
             var targetOthersAlpha = 1 - tagetAlpha;
             var totalOthersAlpha = 0f;
             for (var layer = 0; layer < layerCount; layer++)
@@ -94,7 +83,7 @@ namespace TerrainParts.Editor
                 {
                     continue;
                 }
-                totalOthersAlpha += alphaMap[z, x, layer];
+                totalOthersAlpha += alphaMap[pixelPos.y, pixelPos.x, layer];
             }
 
             if (totalOthersAlpha == 0)
@@ -109,7 +98,7 @@ namespace TerrainParts.Editor
                 {
                     continue;
                 }
-                alphaMap[z, x, layer] *= multiplier;
+                alphaMap[pixelPos.y, pixelPos.x, layer] *= multiplier;
             }
         }
     }
