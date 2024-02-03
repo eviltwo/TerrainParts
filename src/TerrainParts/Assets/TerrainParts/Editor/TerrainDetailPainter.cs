@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace TerrainParts.Editor
 {
-    public class TerrainPartsDetailPainter
+    public class TerrainDetailPainter
     {
         private readonly Terrain _terrain;
 
-        public TerrainPartsDetailPainter(Terrain terrain)
+        public TerrainDetailPainter(Terrain terrain)
         {
             _terrain = terrain;
         }
