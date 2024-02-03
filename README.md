@@ -26,5 +26,5 @@ https://github.com/eviltwo/TerrainParts.git?path=src/TerrainParts/Assets/Terrain
 | Texture layer modify | Included |
 | Hole modify | Included |
 | Tree modify | Included |
-| Details modify | Not yet |
+| Details modify | Included |
 | More shape textures (.png) | Add when I needed |

@@ -1,8 +1,9 @@
 # Changelog
 
-## [0.9.3] - 2024-02-03
+## [0.9.4] - 2024-02-03
 ### Added
 - TreePainter
+- DetailPainter
 
 ## [0.9.2] - 2024-02-02
 ### Added
