@@ -21,14 +21,15 @@ namespace TerrainParts.Editor
         {
             var terrainData = _terrain.terrainData;
             var prototypeCount = terrainData.treePrototypes.Length;
-            var densityMaps = new float[_settings.TreeDencityMapResolution, _settings.TreeDencityMapResolution, prototypeCount];
-            for (var x = 0; x < _settings.TreeDencityMapResolution; x++)
+            var densityMapSize = new Vector2Int(_settings.TreeDensityMapResolution, _settings.TreeDensityMapResolution);
+            var densityMaps = new float[densityMapSize.y, densityMapSize.x, prototypeCount];
+            for (var x = 0; x < densityMapSize.x; x++)
             {
-                for (var y = 0; y < _settings.TreeDencityMapResolution; y++)
+                for (var y = 0; y < densityMapSize.y; y++)
                 {
                     for (var layer = 0; layer < prototypeCount; layer++)
                     {
-                        densityMaps[x, y, layer] = 0;
+                        densityMaps[y, x, layer] = 0;
                     }
                 }
             }
@@ -42,25 +43,15 @@ namespace TerrainParts.Editor
                     continue;
                 }
                 part.GetRect(out var minX, out var minZ, out var maxX, out var maxZ);
-                minX = Mathf.Max(minX - _terrain.transform.position.x, 0);
-                minZ = Mathf.Max(minZ - _terrain.transform.position.z, 0);
-                maxX = Mathf.Min(maxX - _terrain.transform.position.x, _terrain.terrainData.size.x);
-                maxZ = Mathf.Min(maxZ - _terrain.transform.position.z, _terrain.terrainData.size.z);
-                var baseX = Mathf.CeilToInt(minX / terrainData.size.x * _settings.TreeDencityMapResolution);
-                var baseZ = Mathf.CeilToInt(minZ / terrainData.size.z * _settings.TreeDencityMapResolution);
-                var exX = Mathf.CeilToInt(maxX / terrainData.size.x * _settings.TreeDencityMapResolution);
-                var exZ = Mathf.CeilToInt(maxZ / terrainData.size.z * _settings.TreeDencityMapResolution);
-                var xResolution = exX - baseX;
-                var zResolution = exZ - baseZ;
-                for (var x = 0; x < xResolution; x++)
+                PainterUtility.CalculatePixelRange(minX, minZ, maxX, maxZ, _terrain, densityMapSize, out var basePixel, out var pixelSize);
+                for (var x = 0; x < pixelSize.x; x++)
                 {
-                    for (var z = 0; z < zResolution; z++)
+                    for (var y = 0; y < pixelSize.y; y++)
                     {
-                        var pixelX = baseX + x;
-                        var pixelZ = baseZ + z;
-                        var worldX = _terrain.transform.position.x + (float)pixelX / _settings.TreeDencityMapResolution * terrainData.size.x;
-                        var worldZ = _terrain.transform.position.z + (float)pixelZ / _settings.TreeDencityMapResolution * terrainData.size.z;
-                        if (part.TryGetAlpha(worldX, worldZ, out var resultAlpha))
+                        var pixelX = basePixel.x + x;
+                        var pixelZ = basePixel.y + y;
+                        var worldPos = PainterUtility.PixelToWorld(new Vector2Int(pixelX, pixelZ), densityMapSize, _terrain);
+                        if (part.TryGetAlpha(worldPos.x, worldPos.z, out var resultAlpha))
                         {
                             for (int dataIndex = 0; dataIndex < prototypeDataCount; dataIndex++)
                             {
@@ -79,20 +70,20 @@ namespace TerrainParts.Editor
                 }
             }
 
-            var pixelSizeX = _terrain.terrainData.size.x / _settings.TreeDencityMapResolution;
-            var pixelSizeZ = _terrain.terrainData.size.z / _settings.TreeDencityMapResolution;
+            var pixelSizeX = _terrain.terrainData.size.x / densityMapSize.x;
+            var pixelSizeZ = _terrain.terrainData.size.z / densityMapSize.y;
             var pixelArea = pixelSizeX * pixelSizeZ;
             var treeInstances = new List<TreeInstance>();
-            for (var x = 0; x < _settings.TreeDencityMapResolution; x++)
+            for (var x = 0; x < densityMapSize.x; x++)
             {
-                for (var z = 0; z < _settings.TreeDencityMapResolution; z++)
+                for (var y = 0; y < densityMapSize.y; y++)
                 {
-                    var localX = (float)x / _settings.TreeDencityMapResolution;
-                    var localZ = (float)z / _settings.TreeDencityMapResolution;
+                    var localX = (float)x / densityMapSize.x;
+                    var localZ = (float)y / densityMapSize.y;
                     for (int prototypeIndex = 0; prototypeIndex < prototypeCount; prototypeIndex++)
                     {
                         var treeDetail = _settings.GetTreeDetail(prototypeIndex);
-                        var densityPerUnit = Mathf.Min(densityMaps[z, x, prototypeIndex], MaxDencityPerUnit);
+                        var densityPerUnit = Mathf.Min(densityMaps[y, x, prototypeIndex], MaxDencityPerUnit);
                         if (densityPerUnit <= 0)
                         {
                             continue;
@@ -102,9 +93,9 @@ namespace TerrainParts.Editor
                         for (var i = 0; i < treeCount; i++)
                         {
                             var position = new Vector3(
-                                localX + (float)_random.NextDouble() / _settings.TreeDencityMapResolution,
+                                localX + (float)_random.NextDouble() / densityMapSize.x,
                                 0,
-                                localZ + (float)_random.NextDouble() / _settings.TreeDencityMapResolution);
+                                localZ + (float)_random.NextDouble() / densityMapSize.y);
                             var rotation = (float)_random.NextDouble() * 2 * Mathf.PI;
                             CalculateTreeScales(treeDetail, _random, out var width, out var height);
                             var treeInstance = new TreeInstance
