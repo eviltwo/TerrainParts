@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TerrainParts
 {
@@ -28,6 +29,9 @@ namespace TerrainParts
         [SerializeField]
         public ToolCategory ToolCategory = ToolCategory.Height;
 
+        [SerializeField, FormerlySerializedAs("WriteCondition")]
+        public WriteCondition HeightWriteCondition = default;
+
         [SerializeField]
         public int TextureLayerIndex = 1;
 
@@ -42,9 +46,6 @@ namespace TerrainParts
 
         [SerializeField]
         public DetailPrototypeData[] DetailPrototypeDataList = new DetailPrototypeData[0];
-
-        [SerializeField]
-        public WriteCondition WriteCondition = default;
 
         [SerializeField]
         public int Layer = 0;

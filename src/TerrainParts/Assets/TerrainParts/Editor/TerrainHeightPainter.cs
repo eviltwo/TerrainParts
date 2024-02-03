@@ -40,7 +40,7 @@ namespace TerrainParts.Editor
                         {
                             resultHeight -= _terrain.transform.position.y;
                             var currentHeight = heightMap[pixelPos.y, pixelPos.x] * terrainData.size.y;
-                            var mergedHeight = TerrainPartsUtility.MergeHeight(currentHeight, resultHeight, basicData.WriteCondition);
+                            var mergedHeight = TerrainPartsUtility.MergeHeight(currentHeight, resultHeight, basicData.HeightWriteCondition);
                             var smoothedHeight = Mathf.Lerp(currentHeight, mergedHeight, resultAlpha);
                             heightMap[pixelPos.y, pixelPos.x] = smoothedHeight / terrainData.size.y;
                         }
