@@ -24,7 +24,7 @@ namespace TerrainParts.Editor
                 {
                     for (var layer = 0; layer < prototypeCount; layer++)
                     {
-                        densityIntValueMaps[y, x, layer] = layer == 0 ? 1 : 0;
+                        densityIntValueMaps[y, x, layer] = 0;
                     }
                 }
             }
