@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79887c40c9ccab34989f0c2c9c6286b4, type: 3}
+  m_Name: DefaultTerrainPartsBuildSettings
+  m_EditorClassIdentifier: 
+  _randomSeed: 0
+  _treePainterSettings:
+    _treeDencityMapResolution: 500
+    _defaultTreeDetail:
+      _isHeightRandom: 1
+      _heightRandomMin: 1
+      _heightRandomMax: 1.2
+      _isLockWidthToHeight: 1
+      _isWidthRandom: 1
+      _widthRandomMin: 1
+      _widthRandomMax: 1.2
+    _overrideTreeDetails: []

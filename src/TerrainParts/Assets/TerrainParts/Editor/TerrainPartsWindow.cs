@@ -14,9 +14,15 @@ namespace TerrainParts.Editor
             "Terrain",
         };
 
+        private static readonly string UserSettingsKey = "TerrainParts_BuildSettings";
+
+        [SerializeField]
+        private TerrainPartsBuildSettings _defaultBuildSettings = null;
+
         private int _selectedTab = 0;
         private ToolCategory _toolCategory = ToolCategoryExtention.Everything;
         private Vector2 _scrollPosition;
+        private TerrainPartsBuildSettings _buildSettings;
 
         [MenuItem("Window/TerrainParts")]
         public static void Open()
@@ -29,6 +35,21 @@ namespace TerrainParts.Editor
         private void OnEnable()
         {
             SceneView.duringSceneGui += OnSceneGUI;
+
+            var buildSettingsGuid = EditorUserSettings.GetConfigValue(UserSettingsKey);
+            if (!string.IsNullOrEmpty(buildSettingsGuid))
+            {
+                var userBuildSettingsPath = AssetDatabase.GUIDToAssetPath(buildSettingsGuid);
+                if (!string.IsNullOrEmpty(userBuildSettingsPath))
+                {
+                    _buildSettings = AssetDatabase.LoadAssetAtPath<TerrainPartsBuildSettings>(userBuildSettingsPath);
+                }
+            }
+
+            if (_buildSettings == null)
+            {
+                _buildSettings = _defaultBuildSettings;
+            }
         }
 
         private void OnDisable()
@@ -119,6 +140,18 @@ namespace TerrainParts.Editor
 
             EditorGUILayout.Space();
 
+            GUILayout.Label("Build Settings");
+            using (new EditorGUI.IndentLevelScope(1))
+            {
+                _buildSettings = (TerrainPartsBuildSettings)EditorGUILayout.ObjectField(_buildSettings, typeof(TerrainPartsBuildSettings), false);
+                if (_buildSettings == null)
+                {
+                    _buildSettings = _defaultBuildSettings;
+                }
+            }
+
+            EditorGUILayout.Space();
+
             _toolCategory = (ToolCategory)EditorGUILayout.EnumFlagsField("Tool filter", _toolCategory);
             if (GUILayout.Button("Rebuild terrain"))
             {
@@ -153,9 +186,19 @@ namespace TerrainParts.Editor
                         var partsForTool = parts.Where(p => p.GetBasicData().ToolCategory.HasFlagAll(ToolCategory.Hole));
                         painter.Paint(partsForTool);
                     }
+                    if (_toolCategory.HasFlagAll(ToolCategory.Tree))
+                    {
+                        var painter = new TerrainTreePainter(terrain, _buildSettings.TreePainterSettings, new System.Random(_buildSettings.RandomSeed));
+                        var partsForTool = parts.Where(p => p.GetBasicData().ToolCategory.HasFlagAll(ToolCategory.Tree));
+                        painter.Paint(partsForTool);
+                    }
                 }
+
                 stopwatch.Stop();
                 Debug.Log($"Rebuild terrain using parts: {stopwatch.ElapsedMilliseconds}ms");
+
+                var buildSettingsGuidForSave = _buildSettings == _defaultBuildSettings ? string.Empty : AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(_buildSettings));
+                EditorUserSettings.SetConfigValue(UserSettingsKey, buildSettingsGuidForSave);
             }
         }
 
