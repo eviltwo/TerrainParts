@@ -13,4 +13,23 @@ MonoBehaviour:
   m_Name: DefaultTerrainPartsBuildSettings
   m_EditorClassIdentifier: 
   _randomSeed: 0
-  _treeDencityMapResolution: 500
+  _treePainterSettings:
+    _treeDencityMapResolution: 500
+    _defaultTreeDetail:
+      _isHeightRandom: 1
+      _heightRandomMin: 1
+      _heightRandomMax: 1.2
+      _isLockWidthToHeight: 1
+      _isWidthRandom: 1
+      _widthRandomMin: 1
+      _widthRandomMax: 1.2
+    _overrideTreeDetails:
+    - _prototypeIndex: 0
+      _detail:
+        _isHeightRandom: 1
+        _heightRandomMin: 0
+        _heightRandomMax: 0
+        _isLockWidthToHeight: 0
+        _isWidthRandom: 0
+        _widthRandomMin: 0
+        _widthRandomMax: 0
