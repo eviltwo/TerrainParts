@@ -1310,8 +1310,6 @@ MonoBehaviour:
     DetailPrototypeDataList:
     - Index: 0
       Density: 100
-    - Index: 1
-      Density: 100
     WriteCondition: 1
     Layer: 0
     OrderInLayer: 0
