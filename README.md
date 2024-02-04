@@ -1,7 +1,7 @@
 # TerrainParts
  Non-destructive terrain modifier for Unity. Place shapes without using terrain paint.
 
-![terrain-parts-with-tool-window](https://github.com/eviltwo/TerrainParts/assets/7721151/b3c77c5b-ee0d-4625-828c-061cbb63f217)
+![terrain-parts-window](https://github.com/eviltwo/TerrainParts/assets/7721151/aae638e4-9661-418f-b721-e78a7b45dc51)
 
 # Install with UPM
 ```
