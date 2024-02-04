@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.8] - 2024-02-04
+### Add
+- Layer name settings
+
 ## [0.9.7] - 2024-02-04
 ### Changed
 - Script directory
