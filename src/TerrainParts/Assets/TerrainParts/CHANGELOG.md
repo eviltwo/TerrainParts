@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.7] - 2024-02-04
+### Changed
+- Script directory
+
 ## [0.9.6] - 2024-02-04
 ### Added
 - Gizmos icon.
