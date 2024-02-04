@@ -88,18 +88,6 @@ namespace TerrainParts
             return true;
         }
 
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.blue;
-            var cornersCount = _corners.Length;
-            for (int i = 0; i < cornersCount; i++)
-            {
-                var p1 = transform.TransformPoint(_corners[i]);
-                var p2 = transform.TransformPoint(_corners[(i + 1) % cornersCount]);
-                Gizmos.DrawLine(p1, p2);
-            }
-        }
-
         private Vector3 FitToSurface(Vector3 worldPosition)
         {
             worldPosition.y = 0;
@@ -124,6 +112,25 @@ namespace TerrainParts
             var xy = (_cachedRightY - _cachedOriginY) * diff.x;
             var zy = (_cachedForwardY - _cachedOriginY) * diff.z;
             return new Vector3(worldPosition.x, xy + zy + _cachedOriginY, worldPosition.z);
+        }
+
+        /*
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawIcon(transform.position, "sample-icon.png", true);
+        }
+        */
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.blue;
+            var cornersCount = _corners.Length;
+            for (int i = 0; i < cornersCount; i++)
+            {
+                var p1 = transform.TransformPoint(_corners[i]);
+                var p2 = transform.TransformPoint(_corners[(i + 1) % cornersCount]);
+                Gizmos.DrawLine(p1, p2);
+            }
         }
     }
 }

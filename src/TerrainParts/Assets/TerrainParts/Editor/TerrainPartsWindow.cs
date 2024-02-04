@@ -10,8 +10,8 @@ namespace TerrainParts.Editor
         private static readonly string[] _tabNames = new string[]
         {
             "Parts",
-            "Layer",
-            "Terrain",
+            "Builds",
+            "Others",
         };
 
         private static readonly string UserSettingsKey = "TerrainParts_BuildSettings";
@@ -19,10 +19,14 @@ namespace TerrainParts.Editor
         [SerializeField]
         private TerrainPartsBuildSettings _defaultBuildSettings = null;
 
+        [SerializeField]
+        private Texture2D _gizmosIconTexture = null;
+
         private int _selectedTab = 0;
         private ToolCategory _toolCategory = ToolCategoryExtention.Everything;
         private Vector2 _scrollPosition;
         private TerrainPartsBuildSettings _buildSettings;
+        private GizmoIconReplicator _gizmoIconReplicator;
 
         [MenuItem("Window/TerrainParts")]
         public static void Open()
@@ -50,6 +54,8 @@ namespace TerrainParts.Editor
             {
                 _buildSettings = _defaultBuildSettings;
             }
+
+            _gizmoIconReplicator = new GizmoIconReplicator(_gizmosIconTexture, "TerrainParts");
         }
 
         private void OnDisable()
@@ -66,10 +72,10 @@ namespace TerrainParts.Editor
                     DrawPartsGUI();
                     break;
                 case 1:
-                    DrawLayerGUI();
+                    DrawTerrainGUI();
                     break;
                 case 2:
-                    DrawTerrainGUI();
+                    DrawOthersGUI();
                     break;
             }
         }
@@ -109,11 +115,6 @@ namespace TerrainParts.Editor
                     }
                 }
             }
-        }
-
-        private void DrawLayerGUI()
-        {
-            EditorGUILayout.HelpBox("Sorry, Not implemented yet. It will probably be possible to rename layers.", MessageType.Info);
         }
 
         private void DrawTerrainGUI()
@@ -205,6 +206,23 @@ namespace TerrainParts.Editor
 
                 var buildSettingsGuidForSave = _buildSettings == _defaultBuildSettings ? string.Empty : AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(_buildSettings));
                 EditorUserSettings.SetConfigValue(UserSettingsKey, buildSettingsGuidForSave);
+            }
+        }
+
+        private void DrawOthersGUI()
+        {
+            EditorGUILayout.LabelField("Gizmos");
+            using (new EditorGUI.IndentLevelScope(1))
+            {
+                EditorGUILayout.HelpBox("Generate image to display the gizmo icon in \"Assets/Gizmos\".", MessageType.Info);
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.Space(EditorGUI.indentLevel * 15); // Button indent
+                    if (GUILayout.Button("Generate gizmo icon texture"))
+                    {
+                        _gizmoIconReplicator.Replicate();
+                    }
+                }
             }
         }
 
