@@ -8,6 +8,11 @@ namespace TerrainParts
         [SerializeField]
         private string[] _layerNames = new string[] { "Base" };
 
+        public int GetLayerNameCount()
+        {
+            return _layerNames.Length;
+        }
+
         public string GetLayerName(int index)
         {
             if (index < 0 || index >= _layerNames.Length)

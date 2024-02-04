@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -83,8 +84,32 @@ namespace TerrainParts.Editor
             enableDetailToggle.RegisterCallback<ChangeEvent<bool>>(v => detailPropertyElement.style.display = v.newValue ? DisplayStyle.Flex : DisplayStyle.None);
             container.Add(detailPropertyElement);
 
-            container.Add(new PropertyField(property.FindPropertyRelative("Layer")));
+            var layerSettingsGuid = EditorUserSettings.GetConfigValue(TerrainPartsEditorDefines.UserLayerSettingsKey);
+
+            if (TryGetLayerSettings(out var layerSettings) && layerSettings.GetLayerNameCount() > 0)
+            {
+                var layerCount = layerSettings.GetLayerNameCount();
+                var layerNames = new List<string>();
+                for (var i = 0; i < layerCount; i++)
+                {
+                    layerNames.Add(layerSettings.GetLayerName(i));
+                }
+                var popupField = new PopupField<string>("Layer", layerNames, property.FindPropertyRelative("Layer").intValue);
+                popupField.RegisterValueChangedCallback(e =>
+                {
+                    property.serializedObject.Update();
+                    property.FindPropertyRelative("Layer").intValue = layerNames.IndexOf(e.newValue);
+                    property.serializedObject.ApplyModifiedProperties();
+                });
+                container.Add(popupField);
+            }
+            else
+            {
+                container.Add(new PropertyField(property.FindPropertyRelative("Layer")));
+            }
+
             container.Add(new PropertyField(property.FindPropertyRelative("OrderInLayer")));
+
             return container;
         }
 
@@ -102,6 +127,26 @@ namespace TerrainParts.Editor
             }
             args.SerializedProperty.FindPropertyRelative("ToolCategory").enumValueFlag = (int)toolCategoryFlags;
             args.SerializedProperty.serializedObject.ApplyModifiedProperties();
+        }
+
+        private static bool TryGetLayerSettings(out TerrainPartsLayerSettings result)
+        {
+            var layerSettingsGuid = EditorUserSettings.GetConfigValue(TerrainPartsEditorDefines.UserLayerSettingsKey);
+            if (string.IsNullOrEmpty(layerSettingsGuid))
+            {
+                result = null;
+                return false;
+            }
+
+            var path = AssetDatabase.GUIDToAssetPath(layerSettingsGuid);
+            if (string.IsNullOrEmpty(path))
+            {
+                result = null;
+                return false;
+            }
+
+            result = AssetDatabase.LoadAssetAtPath<TerrainPartsLayerSettings>(path);
+            return result != null;
         }
     }
 }
