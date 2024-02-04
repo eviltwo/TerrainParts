@@ -114,13 +114,6 @@ namespace TerrainParts
             return new Vector3(worldPosition.x, xy + zy + _cachedOriginY, worldPosition.z);
         }
 
-        /*
-        private void OnDrawGizmos()
-        {
-            Gizmos.DrawIcon(transform.position, "sample-icon.png", true);
-        }
-        */
-
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;
