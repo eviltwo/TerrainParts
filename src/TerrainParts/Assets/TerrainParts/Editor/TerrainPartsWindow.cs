@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -10,8 +11,8 @@ namespace TerrainParts.Editor
         private static readonly string[] _tabNames = new string[]
         {
             "Parts",
-            "Layer",
-            "Terrain",
+            "Builds",
+            "Others",
         };
 
         private static readonly string UserSettingsKey = "TerrainParts_BuildSettings";
@@ -19,10 +20,14 @@ namespace TerrainParts.Editor
         [SerializeField]
         private TerrainPartsBuildSettings _defaultBuildSettings = null;
 
+        [SerializeField]
+        private Texture2D _gizmosIconTexture = null;
+
         private int _selectedTab = 0;
         private ToolCategory _toolCategory = ToolCategoryExtention.Everything;
         private Vector2 _scrollPosition;
         private TerrainPartsBuildSettings _buildSettings;
+        private GizmoIconReplicator _gizmoIconReplicator;
 
         [MenuItem("Window/TerrainParts")]
         public static void Open()
@@ -50,6 +55,9 @@ namespace TerrainParts.Editor
             {
                 _buildSettings = _defaultBuildSettings;
             }
+
+            var textureDirectoryPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(_gizmosIconTexture));
+            _gizmoIconReplicator = new GizmoIconReplicator(textureDirectoryPath, "TerrainParts");
         }
 
         private void OnDisable()
@@ -66,10 +74,10 @@ namespace TerrainParts.Editor
                     DrawPartsGUI();
                     break;
                 case 1:
-                    DrawLayerGUI();
+                    DrawTerrainGUI();
                     break;
                 case 2:
-                    DrawTerrainGUI();
+                    DrawOthersGUI();
                     break;
             }
         }
@@ -109,11 +117,6 @@ namespace TerrainParts.Editor
                     }
                 }
             }
-        }
-
-        private void DrawLayerGUI()
-        {
-            EditorGUILayout.HelpBox("Sorry, Not implemented yet. It will probably be possible to rename layers.", MessageType.Info);
         }
 
         private void DrawTerrainGUI()
@@ -205,6 +208,15 @@ namespace TerrainParts.Editor
 
                 var buildSettingsGuidForSave = _buildSettings == _defaultBuildSettings ? string.Empty : AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(_buildSettings));
                 EditorUserSettings.SetConfigValue(UserSettingsKey, buildSettingsGuidForSave);
+            }
+        }
+
+        private void DrawOthersGUI()
+        {
+            EditorGUILayout.LabelField(AssetDatabase.GetAssetPath(_gizmosIconTexture));
+            if (GUILayout.Button("Generate gizmo icon textures"))
+            {
+                _gizmoIconReplicator.Replicate();
             }
         }
 

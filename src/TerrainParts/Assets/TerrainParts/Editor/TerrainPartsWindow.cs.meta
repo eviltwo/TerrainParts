@@ -6,6 +6,7 @@ MonoImporter:
   defaultReferences:
   - m_ViewDataDictionary: {instanceID: 0}
   - _defaultBuildSettings: {fileID: 11400000, guid: ca9352631ddcc6444b074bba646aa197, type: 2}
+  - _gizmosIconTexture: {fileID: 2800000, guid: f0fd580103b3df44580f8e5ec0287c68, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

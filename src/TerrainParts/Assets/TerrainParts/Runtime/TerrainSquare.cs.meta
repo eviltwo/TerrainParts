@@ -3,7 +3,9 @@ guid: 9086f84487879ea45a41d094495a9a75
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _gizmosIconTexture: {fileID: 2800000, guid: f0fd580103b3df44580f8e5ec0287c68, type: 3}
+  - _alphaTexture: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
