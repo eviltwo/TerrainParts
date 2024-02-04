@@ -14,7 +14,8 @@ namespace TerrainParts.Editor
             "Others",
         };
 
-        private static readonly string UserSettingsKey = "TerrainParts_BuildSettings";
+        private static readonly string UserBuildSettingsKey = "TerrainParts_BuildSettings";
+        private static readonly string UserLayerSettingsKey = "TerrainParts_LayerSettings";
 
         [SerializeField]
         private TerrainPartsBuildSettings _defaultBuildSettings = null;
@@ -40,7 +41,7 @@ namespace TerrainParts.Editor
         {
             SceneView.duringSceneGui += OnSceneGUI;
 
-            var buildSettingsGuid = EditorUserSettings.GetConfigValue(UserSettingsKey);
+            var buildSettingsGuid = EditorUserSettings.GetConfigValue(UserBuildSettingsKey);
             if (!string.IsNullOrEmpty(buildSettingsGuid))
             {
                 var userBuildSettingsPath = AssetDatabase.GUIDToAssetPath(buildSettingsGuid);
@@ -205,7 +206,7 @@ namespace TerrainParts.Editor
                 Debug.Log($"Rebuild terrain using parts: {stopwatch.ElapsedMilliseconds}ms");
 
                 var buildSettingsGuidForSave = _buildSettings == _defaultBuildSettings ? string.Empty : AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(_buildSettings));
-                EditorUserSettings.SetConfigValue(UserSettingsKey, buildSettingsGuidForSave);
+                EditorUserSettings.SetConfigValue(UserBuildSettingsKey, buildSettingsGuidForSave);
             }
         }
 
@@ -222,6 +223,21 @@ namespace TerrainParts.Editor
                     {
                         _gizmoIconReplicator.Replicate();
                     }
+                }
+            }
+            EditorGUILayout.Space();
+
+            EditorGUILayout.LabelField("Layers");
+            using (new EditorGUI.IndentLevelScope(1))
+            {
+                var layerSettingsGuid = EditorUserSettings.GetConfigValue(UserLayerSettingsKey);
+                var path = AssetDatabase.GUIDToAssetPath(layerSettingsGuid);
+                var layerSettings = AssetDatabase.LoadAssetAtPath<TerrainPartsLayerSettings>(path);
+                var newLayerSettings = (TerrainPartsLayerSettings)EditorGUILayout.ObjectField(layerSettings, typeof(TerrainPartsLayerSettings), false);
+                if (layerSettings != newLayerSettings)
+                {
+                    var guid = newLayerSettings == null ? string.Empty : AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newLayerSettings));
+                    EditorUserSettings.SetConfigValue(UserLayerSettingsKey, guid);
                 }
             }
         }
