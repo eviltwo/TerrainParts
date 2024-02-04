@@ -1,3 +1,5 @@
+using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace TerrainParts
@@ -17,16 +19,62 @@ namespace TerrainParts
         {
             if (index < 0 || index >= _layerNames.Length)
             {
-                return $"Layer {index}";
+                return string.Empty;
             }
 
             var layerName = _layerNames[index];
             if (string.IsNullOrEmpty(layerName))
             {
-                return $"Layer {index}";
+                return string.Empty;
             }
 
             return layerName;
+        }
+    }
+
+    [CustomEditor(typeof(TerrainPartsLayerSettings))]
+    public class TerrainPartsLayerSettingsEditor : UnityEditor.Editor
+    {
+        private ReorderableList _reorderableList;
+
+        private void OnEnable()
+        {
+            _reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("_layerNames"), false, true, false, false);
+            _reorderableList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Layer Names");
+            _reorderableList.drawElementCallback = (rect, index, isActive, isFocused) =>
+            {
+                var element = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
+                EditorGUI.PropertyField(rect, element, GUIContent.none);
+            };
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            _reorderableList.DoLayoutList();
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (GUILayout.Button("+"))
+                {
+                    var property = serializedObject.FindProperty("_layerNames");
+                    property.InsertArrayElementAtIndex(property.arraySize);
+                }
+                if (GUILayout.Button("-"))
+                {
+                    var property = serializedObject.FindProperty("_layerNames");
+                    if (property.arraySize > 0)
+                    {
+                        property.DeleteArrayElementAtIndex(property.arraySize - 1);
+                    }
+                }
+            }
+
+            serializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.Space();
+            EditorGUILayout.HelpBox("Layers for each object are saved as numbers. Editing the name does not change the layer number.", MessageType.Info);
         }
     }
 }

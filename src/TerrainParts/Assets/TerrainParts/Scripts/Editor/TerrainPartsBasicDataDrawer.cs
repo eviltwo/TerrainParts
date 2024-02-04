@@ -92,7 +92,7 @@ namespace TerrainParts.Editor
                 var layerNames = new List<string>();
                 for (var i = 0; i < layerCount; i++)
                 {
-                    layerNames.Add(layerSettings.GetLayerName(i));
+                    layerNames.Add($"{i}: {layerSettings.GetLayerName(i)}"); // Write layer index because same name will be hidden.
                 }
                 var popupField = new PopupField<string>("Layer", layerNames, property.FindPropertyRelative("Layer").intValue);
                 popupField.RegisterValueChangedCallback(e =>
