@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.6] - 2024-02-04
+### Added
+- Gizmos icon.
+
 ## [0.9.5] - 2024-02-03
 ### Added
 - Refactor painters.
