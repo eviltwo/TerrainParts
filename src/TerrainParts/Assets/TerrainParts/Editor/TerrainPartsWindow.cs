@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -56,8 +55,7 @@ namespace TerrainParts.Editor
                 _buildSettings = _defaultBuildSettings;
             }
 
-            var textureDirectoryPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(_gizmosIconTexture));
-            _gizmoIconReplicator = new GizmoIconReplicator(textureDirectoryPath, "TerrainParts");
+            _gizmoIconReplicator = new GizmoIconReplicator(_gizmosIconTexture, "TerrainParts");
         }
 
         private void OnDisable()
@@ -213,10 +211,18 @@ namespace TerrainParts.Editor
 
         private void DrawOthersGUI()
         {
-            EditorGUILayout.LabelField(AssetDatabase.GetAssetPath(_gizmosIconTexture));
-            if (GUILayout.Button("Generate gizmo icon textures"))
+            EditorGUILayout.LabelField("Gizmos");
+            using (new EditorGUI.IndentLevelScope(1))
             {
-                _gizmoIconReplicator.Replicate();
+                EditorGUILayout.HelpBox("Generate image to display the gizmo icon in \"Assets/Gizmos\".", MessageType.Info);
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.Space(EditorGUI.indentLevel * 15); // Button indent
+                    if (GUILayout.Button("Generate gizmo icon texture"))
+                    {
+                        _gizmoIconReplicator.Replicate();
+                    }
+                }
             }
         }
 
